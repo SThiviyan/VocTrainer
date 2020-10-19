@@ -8,11 +8,15 @@
 #include "ManageWordList.hpp"
 
 
-void Manage::WriteToList(std::string NameofPart,std::string Language, std::string SecondLanguage)
+void Manage::WriteToList(char *NameofPart,char *Language, char *SecondLanguage)
 {
     
     
-    
+}
+
+void Manage::ReadList(char *Language, char *SecondLanguage)
+{
     
 }
+
 

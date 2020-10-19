@@ -8,8 +8,10 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-
+   
+    
+   void WriteToList(char *NameofPart,char *Language, char *SecondLanguage);
+   void ReadList(char *Language, char *SecondLanguage);
     
 #ifdef __cplusplus
 }

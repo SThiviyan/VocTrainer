@@ -16,10 +16,15 @@
 class Manage
 {
 public:
-    void WriteToList(std::string NameofPart,std::string Language, std::string SecondLanguage);
-    void ReadList(std::string Language, std::string SecondLanguage);
+    void WriteToList(char *NameofPart,char *Language,char *SecondLanguage);
+    void ReadList(char *Language, char *SecondLanguage);
+    
+   
+    
+    std::fstream FileStream;
     
 private:
+    
     std::string Write;
     
     
