@@ -89,7 +89,7 @@ class AddWordsViewController: UIViewController {
      
         
         let ButtonImageHeight = -UIScreen.main.bounds.height * 0.225
-        let ButtonImageWidth = -UIScreen.main.bounds.width * 0.69
+        let ButtonImageWidth = -UIScreen.main.bounds.width * 0.675
        
         TopButton.imageView?.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         TopButton.imageView?.widthAnchor.constraint(equalTo: TopButton.widthAnchor, constant: ButtonImageWidth).isActive = true
@@ -97,7 +97,7 @@ class AddWordsViewController: UIViewController {
         TopButton.imageView?.topAnchor.constraint(equalTo: TopButton.topAnchor, constant: 30).isActive = true
         
         BottomButton.imageView?.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        BottomButton.imageView?.widthAnchor.constraint(equalTo: BottomButton.widthAnchor, constant: ButtonImageWidth + 10).isActive = true
+        BottomButton.imageView?.widthAnchor.constraint(equalTo: BottomButton.widthAnchor, constant: ButtonImageWidth).isActive = true
         BottomButton.imageView?.heightAnchor.constraint(equalTo: BottomButton.heightAnchor, constant: ButtonImageHeight).isActive = true
         BottomButton.imageView?.topAnchor.constraint(equalTo: BottomButton.topAnchor, constant: 30).isActive = true
     
@@ -176,6 +176,7 @@ class TypeInWordsViewcontroller: UIViewController
         Continue.addTarget(self, action: #selector(ContinueButtonTapped), for: .touchUpInside)
         
         SetLayout()
+        
     }
     
     func SetLayout()
@@ -224,8 +225,12 @@ extension TypeInWordsViewcontroller: UIPickerViewDelegate, UIPickerViewDataSourc
        }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-     
+    
+        var LanguageOne = ListOfLanguages[pickerView.selectedRow(inComponent: 0)]
+        var Languagetwo = ListOfLanguages[pickerView.selectedRow(inComponent: 1)]
        
+       StoreLanguageChoice(LanguageOne, Languagetwo)
+       Test()
         
     }
    

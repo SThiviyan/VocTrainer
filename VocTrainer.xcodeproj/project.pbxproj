@@ -32,7 +32,7 @@
 		C550C653253469AF00EE103E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C550C68A2536FAA900EE103E /* VocTrainer-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "VocTrainer-Bridging-Header.h"; sourceTree = "<group>"; };
 		C550C68B2536FAA900EE103E /* ManageWordList.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = ManageWordList.cpp; sourceTree = "<group>"; };
-		C550C68C2536FAA900EE103E /* ManageWordList.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ManageWordList.hpp; sourceTree = "<group>"; };
+		C550C68C2536FAA900EE103E /* ManageWordList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ManageWordList.h; sourceTree = "<group>"; };
 		C550C68F2537168200EE103E /* CustomButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomButton.swift; sourceTree = "<group>"; };
 		C550C6952538C5F300EE103E /* DictionaryMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DictionaryMenuViewController.swift; sourceTree = "<group>"; };
 		C550C69B2538C68400EE103E /* MainMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuViewController.swift; sourceTree = "<group>"; };
@@ -97,6 +97,7 @@
 				C550C647253469AE00EE103E /* SceneDelegate.swift */,
 				C550C650253469AF00EE103E /* LaunchScreen.storyboard */,
 				C550C6AA2538C78500EE103E /* ViewControllers */,
+				C550C6B02538CEA300EE103E /* Home */,
 				C550C6A72538C73200EE103E /* CustomUIElements */,
 			);
 			path = Frontend;
@@ -106,7 +107,7 @@
 			isa = PBXGroup;
 			children = (
 				C550C68B2536FAA900EE103E /* ManageWordList.cpp */,
-				C550C68C2536FAA900EE103E /* ManageWordList.hpp */,
+				C550C68C2536FAA900EE103E /* ManageWordList.h */,
 			);
 			path = Backend;
 			sourceTree = "<group>";
@@ -117,7 +118,6 @@
 				C550C649253469AE00EE103E /* TabBarViewController.swift */,
 				C550C6B22538CEC500EE103E /* Dictionary */,
 				C550C6B12538CEBA00EE103E /* Learn */,
-				C550C6B02538CEA300EE103E /* Home */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
