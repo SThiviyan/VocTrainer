@@ -46,9 +46,7 @@ class TypeInViewController: UIViewController
             
             return Label
         }()
-    
-    
-    
+
     
     override func viewDidLoad()
     {
@@ -69,8 +67,6 @@ class TypeInViewController: UIViewController
        
         setLayout()
     }
-    
-    
     
     @objc func ContinueButtonTapped()
     {
@@ -159,8 +155,19 @@ extension TypeInViewController
                 withReuseIdentifier: CustomCell.reuseidentifier,
                 for: indexPath) as? CustomCell else { fatalError("Cannot create new cell") }
 
-            // Populate the cell with our item description.
-            cell.TextField.placeholder = "\(identifier)"
+            //to get Textfield number get identifier
+            
+    
+            if(identifier % 2 == 0)
+            {
+                cell.TextField.placeholder = "\(self.LabelLanguageOne.text ?? "LanguageOne") Word"
+            }
+            else
+            {
+                cell.TextField.placeholder = "\(self.LabelLanguagetwo.text ?? "LanguageTwo") Word"
+            }
+            
+            
             cell.contentView.backgroundColor = .systemBackground
             cell.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.3).cgColor
             cell.layer.borderWidth = 1

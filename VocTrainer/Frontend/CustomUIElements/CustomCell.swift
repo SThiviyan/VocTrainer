@@ -22,6 +22,9 @@ class CustomCell: UICollectionViewCell
         addSubview(TextField)
         
         TextField.frame = contentView.bounds
+        TextField.autocapitalizationType = .none
+        TextField.enablesReturnKeyAutomatically = true
+        TextField.autocorrectionType = .no
         TextField.delegate = self
     }
     

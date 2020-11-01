@@ -88,17 +88,16 @@ class AddWordsViewController: UIViewController {
         
      
         
-        let ButtonImageHeight = UIScreen.main.bounds.height * 0.1
-        let ButtonImageWidth = UIScreen.main.bounds.width * 0.2
+       
        
         TopButton.imageView?.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        TopButton.imageView?.widthAnchor.constraint(equalToConstant: ButtonImageWidth).isActive = true
-        TopButton.imageView?.heightAnchor.constraint(equalToConstant: ButtonImageHeight).isActive = true
+        TopButton.imageView?.widthAnchor.constraint(equalToConstant: 75).isActive = true
+        TopButton.imageView?.heightAnchor.constraint(equalToConstant: 75).isActive = true
         TopButton.imageView?.topAnchor.constraint(equalTo: TopButton.topAnchor, constant: 30).isActive = true
         
         BottomButton.imageView?.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        BottomButton.imageView?.widthAnchor.constraint(equalToConstant: ButtonImageWidth).isActive = true
-        BottomButton.imageView?.heightAnchor.constraint(equalToConstant: ButtonImageHeight).isActive = true
+        BottomButton.imageView?.widthAnchor.constraint(equalToConstant: 75).isActive = true
+        BottomButton.imageView?.heightAnchor.constraint(equalToConstant: 75).isActive = true
         BottomButton.imageView?.topAnchor.constraint(equalTo: BottomButton.topAnchor, constant: 30).isActive = true
     
        
