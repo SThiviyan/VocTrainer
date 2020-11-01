@@ -29,8 +29,11 @@ class ViewController: UIViewController {
          */
         
         let vc1 = UINavigationController(rootViewController: LearnMenuViewController())
-        let vc2 = MainMenuViewController()
+        let vc2 = UINavigationController(rootViewController: MainMenuViewController())
         let vc3 = DictionaryMenuViewController()
+        
+        vc1.navigationBar.prefersLargeTitles = true
+        vc2.navigationBar.prefersLargeTitles = true
         
         vc1.title = "Learn"
         vc2.title = "Home"
@@ -51,6 +54,7 @@ class ViewController: UIViewController {
         }
         
         tabBarVC.modalPresentationStyle = .fullScreen
+        
         
         self.view.addSubview(tabBarVC.view)
        

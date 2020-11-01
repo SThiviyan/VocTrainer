@@ -6,7 +6,7 @@
 //
 
 import UIKit
-import AVFoundation
+
 
 class AddWordsViewController: UIViewController {
 
@@ -88,17 +88,17 @@ class AddWordsViewController: UIViewController {
         
      
         
-        let ButtonImageHeight = -UIScreen.main.bounds.height * 0.225
-        let ButtonImageWidth = -UIScreen.main.bounds.width * 0.675
+        let ButtonImageHeight = UIScreen.main.bounds.height * 0.1
+        let ButtonImageWidth = UIScreen.main.bounds.width * 0.2
        
         TopButton.imageView?.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        TopButton.imageView?.widthAnchor.constraint(equalTo: TopButton.widthAnchor, constant: ButtonImageWidth).isActive = true
-        TopButton.imageView?.heightAnchor.constraint(equalTo: TopButton.heightAnchor, constant: ButtonImageHeight).isActive = true
+        TopButton.imageView?.widthAnchor.constraint(equalToConstant: ButtonImageWidth).isActive = true
+        TopButton.imageView?.heightAnchor.constraint(equalToConstant: ButtonImageHeight).isActive = true
         TopButton.imageView?.topAnchor.constraint(equalTo: TopButton.topAnchor, constant: 30).isActive = true
         
         BottomButton.imageView?.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        BottomButton.imageView?.widthAnchor.constraint(equalTo: BottomButton.widthAnchor, constant: ButtonImageWidth).isActive = true
-        BottomButton.imageView?.heightAnchor.constraint(equalTo: BottomButton.heightAnchor, constant: ButtonImageHeight).isActive = true
+        BottomButton.imageView?.widthAnchor.constraint(equalToConstant: ButtonImageWidth).isActive = true
+        BottomButton.imageView?.heightAnchor.constraint(equalToConstant: ButtonImageHeight).isActive = true
         BottomButton.imageView?.topAnchor.constraint(equalTo: BottomButton.topAnchor, constant: 30).isActive = true
     
        
@@ -106,7 +106,7 @@ class AddWordsViewController: UIViewController {
     
     @objc func TypeButtonTapped()
     {
-        let vc = TypeInWordsViewcontroller()
+        let vc = PickLanguagesViewcontroller()
         vc.modalPresentationStyle = .fullScreen
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -123,139 +123,11 @@ class AddWordsViewController: UIViewController {
 
 
 
-class TypeInWordsViewcontroller: UIViewController
-{
-    
-    let ListOfLanguages = ["English","Spanish","French","German","Portuguese","Dutch","Japanese","Italian"]
-    
-    let PickerView: UIPickerView =
-        {
-            let PickerView = UIPickerView()
-            PickerView.translatesAutoresizingMaskIntoConstraints = false
-            return PickerView
-        }()
-    
-    let Title: UILabel =
-        {
-            let text = UILabel()
-            text.text = "Choose your Language Pair:"
-            text.font = .boldSystemFont(ofSize: 28)
-            
-            text.translatesAutoresizingMaskIntoConstraints = false
-            
-            return text
-        }()
-    
-    let Continue: CustomButton =
-        {
-            let button = CustomButton()
-            button.setTitle("Continue", for: .normal)
-            button.titleLabel?.font = .boldSystemFont(ofSize: 18)
-            
-            button.translatesAutoresizingMaskIntoConstraints = false
-            
-            return button
-        }()
-    
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        view.backgroundColor = .systemBackground
-        
-        
-        PickerView.delegate = self
-        PickerView.dataSource = self
-        
-        title = "Add Words"
-        
-        view.addSubview(PickerView)
-        view.addSubview(Title)
-        
-        view.addSubview(Continue)
-        Continue.addTarget(self, action: #selector(ContinueButtonTapped), for: .touchUpInside)
-        
-        SetLayout()
-        
-    }
-    
-    func SetLayout()
-    {
-        Title.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        Title.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 60).isActive = true
-        
-        PickerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        PickerView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -40).isActive = true
-        
-        Continue.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        Continue.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -120).isActive = true
-        Continue.widthAnchor.constraint(equalToConstant: 350).isActive = true
-        Continue.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        
-    }
-    
-    @objc func ContinueButtonTapped()
-    {
-        let vc = UIViewController()
-        vc.view.backgroundColor = .systemBackground
-        
-        navigationController?.pushViewController(vc, animated: true)
-    }
-    
-    
-}
-
-extension TypeInWordsViewcontroller: UIPickerViewDelegate, UIPickerViewDataSource
-{
-    func numberOfComponents(in PickerView: UIPickerView) -> Int{
-        return 2
-    }
-    
-    func pickerView(_ PickerView: UIPickerView, numberOfRowsInComponent component: Int)->Int
-    {
-        return ListOfLanguages.count
-    }
-    
-    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
-           if component == 0 {
-               return ListOfLanguages[row]
-           }else {
-               return ListOfLanguages[row]
-           }
-       }
-    
-    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
-    
-        var LanguageOne = ListOfLanguages[pickerView.selectedRow(inComponent: 0)]
-        var Languagetwo = ListOfLanguages[pickerView.selectedRow(inComponent: 1)]
-       
-       StoreLanguageChoice(LanguageOne, Languagetwo)
-       Test()
-        
-    }
-   
-}
 
 
 
 
 
 
-class ScanWordsViewController: UIViewController
-{
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        view.backgroundColor = .systemBackground
-       
-        
-        
-    }
-    
-    func ConfigureCamera()
-    {
-     
-        
-        
-    }
-}
+
+

@@ -86,7 +86,7 @@ class MainMenuViewController: UIViewController
     private func SetupLayout()
     {
         LanguageImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        LanguageImageView.topAnchor.constraint(equalTo: view.topAnchor , constant:150).isActive = true
+        LanguageImageView.topAnchor.constraint(equalTo: view.topAnchor , constant:200).isActive = true
         LanguageImageView.widthAnchor.constraint(equalToConstant: 50).isActive = true
         LanguageImageView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         

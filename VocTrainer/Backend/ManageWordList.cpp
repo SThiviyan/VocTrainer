@@ -27,6 +27,7 @@ void StoreLanguageChoice(const char* LanguageOne, const char* LanguageTwo)
     Languageone = LanguageOne;
     Languagetwo = LanguageTwo;
    
+  
 }
 
 const char* getfirstLanguageChoice()
@@ -39,9 +40,8 @@ const char* getsecondLanguageChoice()
     return Languagetwo;
 }
 
-void Test()
+void TestE()
 {
-    std::cout << "Test" << std::endl;
     std::cout << Languageone << std::endl;
     std::cout << Languagetwo << std::endl;
 }

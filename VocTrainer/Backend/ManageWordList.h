@@ -5,8 +5,8 @@
 //  Created by Thiviyan Saravanamuthu on 14.10.20.
 //
 
-#ifndef ManageWordList_hpp
-#define ManageWordList_hpp
+#ifndef ManageWordList_h
+#define ManageWordList_h
 
 #ifdef __cplusplus
 extern "C" {
@@ -19,10 +19,13 @@ extern "C" {
   const char* getfirstLanguageChoice();
   const char* getsecondLanguageChoice();
 
-  void Test();
 
+  void TestE();
+  
   const char* Languageone;
   const char* Languagetwo;
+
+  
    
 #ifdef __cplusplus
 }

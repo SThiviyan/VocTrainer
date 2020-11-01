@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -20,9 +20,17 @@
 		C550C6A42538C70900EE103E /* LearnMenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C550C6A32538C70900EE103E /* LearnMenuViewController.swift */; };
 		C550C6AE2538C88000EE103E /* CustomScrollView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C550C6AD2538C88000EE103E /* CustomScrollView.swift */; };
 		C550C6B42538CEEB00EE103E /* AddWordsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C550C6B32538CEEB00EE103E /* AddWordsViewController.swift */; };
+		C574145B2544D08A00D771FE /* PickLanguagesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C574145A2544D08A00D771FE /* PickLanguagesViewController.swift */; };
+		C574145E2544D10C00D771FE /* ScanViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C574145D2544D10C00D771FE /* ScanViewController.swift */; };
+		C57414622544D1A300D771FE /* TypeInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57414612544D1A300D771FE /* TypeInViewController.swift */; };
+		C57414642544D2D800D771FE /* Pods_VocTrainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9F9C2A939DBB6D70FFF2400 /* Pods_VocTrainer.framework */; };
+		C574146E2544DBF700D771FE /* CustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C574146D2544DBF700D771FE /* CustomCell.swift */; };
+		C59F21B0254A2CBE002552F2 /* NamingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59F21AF254A2CBE002552F2 /* NamingViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		3AD27750C850E4AD94E0A8A9 /* Pods-VocTrainer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VocTrainer.debug.xcconfig"; path = "Target Support Files/Pods-VocTrainer/Pods-VocTrainer.debug.xcconfig"; sourceTree = "<group>"; };
+		72327746F95FDCACD32499F0 /* Pods-VocTrainer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-VocTrainer.release.xcconfig"; path = "Target Support Files/Pods-VocTrainer/Pods-VocTrainer.release.xcconfig"; sourceTree = "<group>"; };
 		C550C642253469AE00EE103E /* VocTrainer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VocTrainer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C550C645253469AE00EE103E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C550C647253469AE00EE103E /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -40,6 +48,12 @@
 		C550C6A32538C70900EE103E /* LearnMenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LearnMenuViewController.swift; sourceTree = "<group>"; };
 		C550C6AD2538C88000EE103E /* CustomScrollView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomScrollView.swift; sourceTree = "<group>"; };
 		C550C6B32538CEEB00EE103E /* AddWordsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddWordsViewController.swift; sourceTree = "<group>"; };
+		C574145A2544D08A00D771FE /* PickLanguagesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PickLanguagesViewController.swift; sourceTree = "<group>"; };
+		C574145D2544D10C00D771FE /* ScanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanViewController.swift; sourceTree = "<group>"; };
+		C57414612544D1A300D771FE /* TypeInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeInViewController.swift; sourceTree = "<group>"; };
+		C574146D2544DBF700D771FE /* CustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCell.swift; sourceTree = "<group>"; };
+		C59F21AF254A2CBE002552F2 /* NamingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamingViewController.swift; sourceTree = "<group>"; };
+		C9F9C2A939DBB6D70FFF2400 /* Pods_VocTrainer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VocTrainer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -47,17 +61,37 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C57414642544D2D800D771FE /* Pods_VocTrainer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		50DA5FE53ED4AE9B6DEB832F /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				3AD27750C850E4AD94E0A8A9 /* Pods-VocTrainer.debug.xcconfig */,
+				72327746F95FDCACD32499F0 /* Pods-VocTrainer.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		66DB2DC5BFA99DA69654D591 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				C9F9C2A939DBB6D70FFF2400 /* Pods_VocTrainer.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		C550C639253469AE00EE103E = {
 			isa = PBXGroup;
 			children = (
 				C550C644253469AE00EE103E /* VocTrainer */,
 				C550C643253469AE00EE103E /* Products */,
+				50DA5FE53ED4AE9B6DEB832F /* Pods */,
+				66DB2DC5BFA99DA69654D591 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -86,6 +120,7 @@
 			children = (
 				C550C68F2537168200EE103E /* CustomButton.swift */,
 				C550C6AD2538C88000EE103E /* CustomScrollView.swift */,
+				C574146D2544DBF700D771FE /* CustomCell.swift */,
 			);
 			path = CustomUIElements;
 			sourceTree = "<group>";
@@ -134,8 +169,11 @@
 		C550C6B12538CEBA00EE103E /* Learn */ = {
 			isa = PBXGroup;
 			children = (
+				C57414592544D04700D771FE /* Scan */,
+				C57414582544D02000D771FE /* Type In */,
 				C550C6A32538C70900EE103E /* LearnMenuViewController.swift */,
 				C550C6B32538CEEB00EE103E /* AddWordsViewController.swift */,
+				C59F21AF254A2CBE002552F2 /* NamingViewController.swift */,
 			);
 			path = Learn;
 			sourceTree = "<group>";
@@ -148,6 +186,23 @@
 			path = Dictionary;
 			sourceTree = "<group>";
 		};
+		C57414582544D02000D771FE /* Type In */ = {
+			isa = PBXGroup;
+			children = (
+				C574145A2544D08A00D771FE /* PickLanguagesViewController.swift */,
+				C57414612544D1A300D771FE /* TypeInViewController.swift */,
+			);
+			path = "Type In";
+			sourceTree = "<group>";
+		};
+		C57414592544D04700D771FE /* Scan */ = {
+			isa = PBXGroup;
+			children = (
+				C574145D2544D10C00D771FE /* ScanViewController.swift */,
+			);
+			path = Scan;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -155,9 +210,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C550C656253469AF00EE103E /* Build configuration list for PBXNativeTarget "VocTrainer" */;
 			buildPhases = (
+				F7BA473FEF7DFF3F1C218763 /* [CP] Check Pods Manifest.lock */,
 				C550C63E253469AE00EE103E /* Sources */,
 				C550C63F253469AE00EE103E /* Frameworks */,
 				C550C640253469AE00EE103E /* Resources */,
+				AD92819269F0CB2CDCAA7C71 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -213,6 +270,48 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		AD92819269F0CB2CDCAA7C71 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VocTrainer/Pods-VocTrainer-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-VocTrainer/Pods-VocTrainer-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VocTrainer/Pods-VocTrainer-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F7BA473FEF7DFF3F1C218763 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-VocTrainer-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		C550C63E253469AE00EE103E /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -222,13 +321,18 @@
 				C550C6962538C5F300EE103E /* DictionaryMenuViewController.swift in Sources */,
 				C550C6B42538CEEB00EE103E /* AddWordsViewController.swift in Sources */,
 				C550C68D2536FAA900EE103E /* ManageWordList.cpp in Sources */,
+				C574145E2544D10C00D771FE /* ScanViewController.swift in Sources */,
+				C574145B2544D08A00D771FE /* PickLanguagesViewController.swift in Sources */,
 				C550C6A02538C6D100EE103E /* TutorialViewController.swift in Sources */,
+				C574146E2544DBF700D771FE /* CustomCell.swift in Sources */,
 				C550C6AE2538C88000EE103E /* CustomScrollView.swift in Sources */,
 				C550C64A253469AE00EE103E /* TabBarViewController.swift in Sources */,
 				C550C646253469AE00EE103E /* AppDelegate.swift in Sources */,
 				C550C69C2538C68400EE103E /* MainMenuViewController.swift in Sources */,
 				C550C648253469AE00EE103E /* SceneDelegate.swift in Sources */,
 				C550C6902537168200EE103E /* CustomButton.swift in Sources */,
+				C59F21B0254A2CBE002552F2 /* NamingViewController.swift in Sources */,
+				C57414622544D1A300D771FE /* TypeInViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -364,7 +468,9 @@
 		};
 		C550C657253469AF00EE103E /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3AD27750C850E4AD94E0A8A9 /* Pods-VocTrainer.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;
@@ -388,7 +494,9 @@
 		};
 		C550C658253469AF00EE103E /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 72327746F95FDCACD32499F0 /* Pods-VocTrainer.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CLANG_ENABLE_MODULES = YES;

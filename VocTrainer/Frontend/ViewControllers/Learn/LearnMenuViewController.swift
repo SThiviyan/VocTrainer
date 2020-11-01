@@ -51,6 +51,7 @@ class LearnMenuViewController: UIViewController
         let vc = AddWordsViewController()
         vc.modalPresentationStyle = .fullScreen
         navigationController?.pushViewController(vc, animated: true)
+        
     }
     
    
