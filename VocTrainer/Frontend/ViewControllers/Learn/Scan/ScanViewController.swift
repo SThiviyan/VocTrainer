@@ -8,6 +8,7 @@
 import UIKit
 import AVFoundation
 
+//just to commit files to github
 
 
 class ScanWordsViewController: UIViewController

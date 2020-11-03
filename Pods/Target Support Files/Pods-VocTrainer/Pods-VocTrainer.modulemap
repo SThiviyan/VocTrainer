@@ -1,0 +1,6 @@
+framework module Pods_VocTrainer {
+  umbrella header "Pods-VocTrainer-umbrella.h"
+
+  export *
+  module * { export * }
+}

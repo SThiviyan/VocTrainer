@@ -7,6 +7,9 @@
 
 import UIKit
 
+
+//just to commit files to github
+
 class CustomCell: UICollectionViewCell
 {
     static let reuseidentifier = "CustomCell"
