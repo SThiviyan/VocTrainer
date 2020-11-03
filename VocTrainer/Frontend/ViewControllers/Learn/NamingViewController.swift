@@ -52,8 +52,10 @@ class NamingViewController: UIViewController
         
         view.addSubview(Label)
         view.addSubview(TextField)
+        TextField.delegate = self
         
         setLayout()
+        initializeHideKeyboard()
     }
     
     
@@ -88,4 +90,28 @@ extension NamingViewController: UITextFieldDelegate
         
     }
     
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
 }
+
+
+extension NamingViewController {
+ func initializeHideKeyboard(){
+   
+    let tap: UITapGestureRecognizer = UITapGestureRecognizer(
+   target: self,
+   action: #selector(dismissMyKeyboard))
+ 
+   view.addGestureRecognizer(tap)
+  }
+    
+  @objc func dismissMyKeyboard(){
+  view.endEditing(true)
+  }
+    
+ }
+
+

@@ -21,21 +21,26 @@ class CustomCell: UICollectionViewCell
         TextField.textAlignment = .center
         addSubview(TextField)
         
-        TextField.frame = contentView.bounds
+        
         TextField.autocapitalizationType = .none
         TextField.enablesReturnKeyAutomatically = true
-        TextField.autocorrectionType = .no
-        TextField.delegate = self
+        TextField.autocorrectionType = .default
+        TextField.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            TextField.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            TextField.centerYAnchor.constraint(equalTo: contentView.centerYAnchor),
+            TextField.heightAnchor.constraint(equalTo: contentView.heightAnchor),
+            TextField.widthAnchor.constraint(equalTo: contentView.widthAnchor)
+        
+        ])
+        
     }
     
     
 }
 
 
-extension CustomCell: UITextFieldDelegate
-{
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        TextField.text = textField.text
-    }
-    
-}
+
+
+

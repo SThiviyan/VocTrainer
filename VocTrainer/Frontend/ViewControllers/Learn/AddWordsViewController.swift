@@ -81,7 +81,7 @@ class AddWordsViewController: UIViewController {
         
         
         let ButtonPrePos =  -UIScreen.main.bounds.height
-        let ButtonPos = ButtonPrePos * 0.5
+        let ButtonPos = ButtonPrePos * 0.46
         
         TopButton.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor, constant: ButtonPos).isActive = true
         BottomButton.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor, constant: ButtonPos).isActive = true

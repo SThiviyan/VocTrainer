@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SpreadsheetView
 
 
 class TypeInViewController: UIViewController
@@ -17,6 +16,10 @@ class TypeInViewController: UIViewController
 
     var dataSource: UICollectionViewDiffableDataSource<Section, Int>! = nil
     var collectionView: UICollectionView! = nil
+    
+    var texts = [Int:String]()
+    
+    var NumRows = 30
     
     
     let Continue: CustomButton =
@@ -60,11 +63,13 @@ class TypeInViewController: UIViewController
         
         view.addSubview(LabelLanguageOne)
         view.addSubview(LabelLanguagetwo)
-        
-        
+               
         configureHierarchy()
         configureDataSource()
        
+        
+        initializeHideKeyboard()
+        
         setLayout()
     }
     
@@ -136,6 +141,8 @@ extension TypeInViewController
         collectionView.backgroundColor = .systemBackground
         collectionView.register(CustomCell.self, forCellWithReuseIdentifier: CustomCell.reuseidentifier)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.indexDisplayMode = .automatic
+    
         view.addSubview(collectionView)
         
         NSLayoutConstraint.activate([
@@ -146,18 +153,21 @@ extension TypeInViewController
             
         ])
     }
+    
+   
+   
     func configureDataSource() {
         dataSource = UICollectionViewDiffableDataSource<Section, Int>(collectionView: collectionView) {
             (collectionView: UICollectionView, indexPath: IndexPath, identifier: Int) -> UICollectionViewCell? in
 
             // Get a cell of the desired kind.
+            
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: CustomCell.reuseidentifier,
                 for: indexPath) as? CustomCell else { fatalError("Cannot create new cell") }
-
-            //to get Textfield number get identifier
             
-    
+          
+            //to get Textfield number get identifier
             if(identifier % 2 == 0)
             {
                 cell.TextField.placeholder = "\(self.LabelLanguageOne.text ?? "LanguageOne") Word"
@@ -166,14 +176,23 @@ extension TypeInViewController
             {
                 cell.TextField.placeholder = "\(self.LabelLanguagetwo.text ?? "LanguageTwo") Word"
             }
-            
+      
             
             cell.contentView.backgroundColor = .systemBackground
             cell.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.3).cgColor
             cell.layer.borderWidth = 1
             cell.TextField.textAlignment = .center
             cell.TextField.font = UIFont.preferredFont(forTextStyle: .body)
-
+            cell.TextField.delegate = self
+            cell.TextField.tag = indexPath.row
+            if let previousText = self.texts[indexPath.row] {
+                 cell.TextField.text = previousText
+               }
+               else {
+                 cell.TextField.text = ""
+               }
+            cell.isSelected = true
+           
             // Return the cell.
             return cell
         }
@@ -181,12 +200,39 @@ extension TypeInViewController
         // initial data
         var snapshot = NSDiffableDataSourceSnapshot<Section, Int>()
         snapshot.appendSections([.main])
-        snapshot.appendItems(Array(0..<30))
+        snapshot.appendItems(Array(0..<NumRows))
         dataSource.apply(snapshot, animatingDifferences: false)
+        
     }
+    
     
     
 }
 
 
-
+extension TypeInViewController: UITextFieldDelegate
+{
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        texts[textField.tag] = textField.text
+    }
+    
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool
+    {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    func initializeHideKeyboard(){
+      
+       let tap: UITapGestureRecognizer = UITapGestureRecognizer(
+      target: self,
+      action: #selector(dismissMyKeyboard))
+    
+      view.addGestureRecognizer(tap)
+     }
+       
+     @objc func dismissMyKeyboard(){
+      view.endEditing(true)
+     }
+}

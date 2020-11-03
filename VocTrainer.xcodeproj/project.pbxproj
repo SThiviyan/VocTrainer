@@ -214,7 +214,6 @@
 				C550C63E253469AE00EE103E /* Sources */,
 				C550C63F253469AE00EE103E /* Frameworks */,
 				C550C640253469AE00EE103E /* Resources */,
-				AD92819269F0CB2CDCAA7C71 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -271,23 +270,6 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		AD92819269F0CB2CDCAA7C71 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-VocTrainer/Pods-VocTrainer-frameworks-${CONFIGURATION}-input-files.xcfilelist",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-VocTrainer/Pods-VocTrainer-frameworks-${CONFIGURATION}-output-files.xcfilelist",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-VocTrainer/Pods-VocTrainer-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		F7BA473FEF7DFF3F1C218763 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
