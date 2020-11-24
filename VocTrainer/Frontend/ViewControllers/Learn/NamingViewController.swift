@@ -12,6 +12,11 @@ import UIKit
 class NamingViewController: UIViewController
 {
     
+    var LanguageOne = String()
+    var LanguageTwo = String()
+    var LanguageOneWords = [String()]
+    var LanguageTwoWords = [String()]
+    var SectionName = String()
     
 
     let Label: UILabel =
@@ -80,8 +85,22 @@ class NamingViewController: UIViewController
     
     @objc func GoToRootviewController(){
     //Code to go back to LearnMenuViewController
-    navigationController?.popToRootViewController(animated: true)
+        StoreEverything()
+        
+        let vc = LearnMenuViewController()
+        
+        vc.collectionView?.reloadData()
+        
+        navigationController?.popToRootViewController(animated: true)
     }
+    
+    func StoreEverything()
+    {
+        let List = WordList(name: SectionName, LanguageOne: LanguageOne, LanguageTwo: LanguageTwo, WordsLanguageOne: LanguageOneWords, WordsLanguageTwo: LanguageTwoWords)
+         
+        
+        List.SaveItem()
+     }
     
 }
 
@@ -89,7 +108,7 @@ class NamingViewController: UIViewController
 extension NamingViewController: UITextFieldDelegate
 {
     func textFieldDidEndEditing(_ textField: UITextField) {
-        
+        SectionName = textField.text ?? "filler"
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {

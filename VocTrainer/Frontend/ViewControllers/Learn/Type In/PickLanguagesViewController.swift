@@ -142,7 +142,6 @@ extension PickLanguagesViewcontroller: UIPickerViewDelegate, UIPickerViewDataSou
         FirstLanguageChoice = ListOfLanguages[pickerView.selectedRow(inComponent: 0)]
         SecondLanguageChoice = ListOfLanguages[pickerView.selectedRow(inComponent: 1)]
       
-        StoreLanguageChoice(FirstLanguageChoice, SecondLanguageChoice)
         
     }
     

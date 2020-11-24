@@ -12,43 +12,39 @@ import UIKit
 class LearnMenuViewController: UIViewController
 {
  
-    let AddWordsButton: CustomButton =
+     let AddWordsButton: CustomButton =
         {
             let Button = CustomButton()
             Button.setTitle("Add Words", for: .normal)
             return Button
         }()
     
-    let ListButton: CustomButton =
-        {
-            let Button = CustomButton()
-            Button.backgroundColor = .systemBlue
-            Button.layer.cornerRadius = 20
-            return Button
-        }()
+    enum Section {
+        case main
+    }
 
-    
-   
-    let scrollview: CustomScrollView =
-        {
-            let scrollview = CustomScrollView()
-            return scrollview
-        }()
+    var dataSource: UICollectionViewDiffableDataSource<Section, Int>! = nil
+    var collectionView: UICollectionView! = nil
     
     
     override func viewDidLoad() {
+        
         super.viewDidLoad()
+
         
         title = "Learn"
         view.backgroundColor = .systemBackground
+                        
+        let addBtn = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.add, target: self, action: #selector(ButtonTapped))
+        navigationItem.rightBarButtonItem = addBtn
         
-        AddWordsButton.addTarget(self, action: #selector(ButtonTapped), for: .touchUpInside)
         
-        
+        configureHierarchy()
+        configureDataSource()
     }
+  
     
-    
-    @objc private func ButtonTapped()
+    @objc func ButtonTapped()
     {
         let vc = AddWordsViewController()
         vc.modalPresentationStyle = .fullScreen
@@ -57,34 +53,116 @@ class LearnMenuViewController: UIViewController
     }
     
    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        view.addSubview(scrollview)
-        scrollview.addSubview(AddWordsButton)
-        
-       
-        scrollview.addSubview(ListButton)
-        
-        scrollview.contentSize = CGSize(width: view.frame.size.width, height: 2200)
-        Layout()
-    }
-    
-    func Layout(){
-        scrollview.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        scrollview.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        scrollview.heightAnchor.constraint(equalTo: view.heightAnchor, constant: 0).isActive = true
-        scrollview.widthAnchor.constraint(equalTo: view.widthAnchor, constant: 0).isActive = true
-        
-        AddWordsButton.centerXAnchor.constraint(equalTo: scrollview.centerXAnchor).isActive = true
-        AddWordsButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        AddWordsButton.widthAnchor.constraint(equalToConstant: 350).isActive = true
-        AddWordsButton.topAnchor.constraint(equalTo: scrollview.topAnchor, constant: 20).isActive = true
-        
-      
-        ListButton.centerXAnchor.constraint(equalTo: scrollview.centerXAnchor).isActive = true
-        ListButton.heightAnchor.constraint(equalToConstant: 450).isActive = true
-        ListButton.widthAnchor.constraint(equalToConstant: 350).isActive = true
-        ListButton.topAnchor.constraint(equalTo: scrollview.topAnchor, constant: 150).isActive = true
-    }
+   
     
 }
+
+
+extension LearnMenuViewController
+{
+    func createLayout() -> UICollectionViewLayout {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                    heightDimension: .fractionalHeight(1.0))
+               let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+               //
+               // Here we are saying make me two columns. Horizontal count: 2.
+               // Even though the itemSize say - make me 1:1, the group layout overrides that and makes
+               // it stretch to something longer. So group overrides item.
+
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                      heightDimension: .absolute(350))
+               let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
+               let spacing = CGFloat(30)
+               group.interItemSpacing = .fixed(spacing)
+
+               let section = NSCollectionLayoutSection(group: group)
+               section.interGroupSpacing = spacing
+
+               // Another way to add spacing. This is done for the section.
+               section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
+
+               let layout = UICollectionViewCompositionalLayout(section: section)
+               return layout
+        }
+    
+    
+    
+    func configureHierarchy() {
+        collectionView = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+        collectionView.backgroundColor = .systemBackground
+        collectionView.register(LearnCollectionViewCell.self, forCellWithReuseIdentifier: LearnCollectionViewCell.reuseidentifier)
+        collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.indexDisplayMode = .automatic
+        
+        view.addSubview(collectionView)
+        
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            collectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            collectionView.widthAnchor.constraint(equalTo: view.widthAnchor)
+            
+        ])
+    }
+    
+   
+    
+    func configureDataSource() {
+        dataSource = UICollectionViewDiffableDataSource<Section, Int>(collectionView: collectionView) {
+            (collectionView: UICollectionView, indexPath: IndexPath, identifier: Int) -> UICollectionViewCell? in
+            
+            guard let cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: LearnCollectionViewCell.reuseidentifier,
+                for: indexPath) as? LearnCollectionViewCell else { fatalError("Cannot create new cell") }
+            
+            if(DataManager.GetTotalNum(WordList.self) == 0)
+            {
+                cell.contentView.removeFromSuperview()
+                cell.contentView.addSubview(cell.EmptyLabel)
+                cell.EmptyLabel.textColor = .systemGray
+                cell.contentView.backgroundColor = .systemBlue
+            }
+            else
+            {
+                cell.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.3).cgColor
+                cell.layer.borderWidth = 2
+                cell.layer.borderColor = UIColor.white.cgColor
+                cell.layer.cornerRadius = 20
+                cell.layer.backgroundColor = UIColor.systemBlue.cgColor
+                cell.EmptyLabel.textColor = .systemBlue
+                
+                cell.Button.addTarget(self, action: #selector(self.CellButtonTapped), for: .touchUpInside)
+            }
+    
+            // Return the cell.
+            return cell
+        }
+
+        // initial data
+        var snapshot = NSDiffableDataSourceSnapshot<Section, Int>()
+        snapshot.appendSections([.main])
+        var CellNum = DataManager.GetTotalNum(WordList.self)
+        
+        if(CellNum == 0)
+        {
+            CellNum = 1
+        }
+        
+        
+        snapshot.appendItems(Array(0..<DataManager.GetTotalNum(WordList.self)))
+        dataSource.apply(snapshot, animatingDifferences: false)
+    }
+    
+    @objc func CellButtonTapped()
+    {
+        let vc = UIViewController()
+        vc.view.backgroundColor = .systemRed
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
+    
+}
+
+
+

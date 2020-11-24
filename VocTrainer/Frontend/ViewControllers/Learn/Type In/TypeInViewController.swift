@@ -19,6 +19,8 @@ class TypeInViewController: UIViewController
     var collectionView: UICollectionView! = nil
     
     var texts = [Int:String]()
+    var LanguageOneTexts = [String()]
+    var LanguageTwoTexts = [String()]
     
     var NumRows = 30
     
@@ -67,23 +69,25 @@ class TypeInViewController: UIViewController
                
         configureHierarchy()
         configureDataSource()
-       
-        
         initializeHideKeyboard()
-        
         setLayout()
     }
     
     @objc func ContinueButtonTapped()
     {
         let vc = NamingViewController()
+        vc.LanguageOne = LabelLanguageOne.text ?? "filler"
+        vc.LanguageTwo = LabelLanguagetwo.text ?? "filler"
+        
+        SortArray()
+        vc.LanguageOneWords = LanguageOneTexts
+        vc.LanguageTwoWords = LanguageTwoTexts
+        
         navigationController?.pushViewController(vc, animated: true)
     }
     
     func setLayout()
     {
-        
-        
         Continue.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         Continue.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -120).isActive = true
         Continue.widthAnchor.constraint(equalToConstant: 350).isActive = true
@@ -96,19 +100,29 @@ class TypeInViewController: UIViewController
         
         LabelLanguagetwo.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
         LabelLanguagetwo.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
-        
-        
-       
     }
     
-    
-    
-    
-    func LoadWordsIntoCPP()
+    func SortArray()
     {
-         
+        for item in 0...texts.count {
+            if item % 2 == 0 {
+                let temp = texts[item, default: String()]
+                LanguageOneTexts.append(temp)
+            }
+            else if item == 0 {
+                let temp = texts[item, default: String()]
+                LanguageOneTexts.append(temp)
+            }
+            else{
+                let temp = texts[item, default: String()]
+                LanguageTwoTexts.append(temp)
+            }
+        }
+        
+        LanguageOneTexts.remove(at: 0)
+        LanguageTwoTexts.remove(at: 0)
+        
     }
-    
 
 }
 

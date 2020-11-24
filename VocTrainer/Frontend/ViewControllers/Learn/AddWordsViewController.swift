@@ -6,11 +6,12 @@
 //
 
 import UIKit
+import AVKit
 
 
 //just to commit files to github
 
-class AddWordsViewController: UIViewController {
+class AddWordsViewController: UIViewController{
 
   
  
@@ -109,13 +110,23 @@ class AddWordsViewController: UIViewController {
     {
         let vc = PickLanguagesViewcontroller()
         vc.modalPresentationStyle = .fullScreen
+        
         navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc func ScanButtonTapped()
     {
-        let vc = ScanWordsViewController()
+        let vc = UIImagePickerController()
+        
+        
         vc.modalPresentationStyle = .overFullScreen
+        vc.sourceType = .camera
+        vc.mediaTypes = ["public.image"]
+        vc.cameraDevice = .rear
+        vc.cameraFlashMode = .auto
+        vc.allowsEditing = false
+        vc.delegate = self
+        vc.cameraCaptureMode = .photo
         navigationController?.present(vc, animated: true)
     }
   
@@ -124,7 +135,14 @@ class AddWordsViewController: UIViewController {
 
 
 
-
+extension AddWordsViewController: UIImagePickerControllerDelegate & UINavigationControllerDelegate
+{
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+    }
+    
+    
+}
 
 
 
