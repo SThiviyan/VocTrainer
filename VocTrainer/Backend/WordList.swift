@@ -12,6 +12,7 @@ struct WordList: Codable
 {
     
     public var name: String
+    public var TimeAdded: Date
     public var LanguageOne: String
     public var LanguageTwo: String
     public var WordsLanguageOne: [String]
@@ -27,5 +28,16 @@ struct WordList: Codable
         DataManager.delete(name)
     }
     
+    
+}
+
+struct ListItem: Hashable
+{
+    var name: String
+    var TimeAdded: Date
+    var LanguageOne: String
+    var LanguageTwo: String
+    var LanguageOneList: [String]
+    var LanguageTwoList: [String]
     
 }

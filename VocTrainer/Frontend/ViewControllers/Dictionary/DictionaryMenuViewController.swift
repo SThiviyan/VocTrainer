@@ -10,44 +10,58 @@ import UIKit
 //just to commit files to github
 
 class DictionaryMenuViewController: UIViewController {
-    let Searchbar: UISearchBar =
-        {
-            let Searchbar = UISearchBar()
-            Searchbar.placeholder = "Search in your Dictionary"
-            Searchbar.barStyle = .default
-            Searchbar.translatesAutoresizingMaskIntoConstraints = false
-            Searchbar.showsCancelButton = true
-            //Searchbar.setShowsCancelButton(true, animated: true)
-            
-            return Searchbar
-        }()
     
-    
+    var ListItems = [ListItem]()
+    let ListStrings = [String]()
+
+ 
     let TableView : UITableView =
         {
             let tableView = UITableView(frame: .zero, style: .insetGrouped)
             tableView.translatesAutoresizingMaskIntoConstraints = false
             tableView.allowsSelection = true
-            
+            tableView.showsVerticalScrollIndicator = true
             
             
             
             return tableView
         }()
     
+    let searchcontroller = UISearchController(searchResultsController: nil)
    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
+
+        let TempItems = DataManager.LoadAll(WordList.self)
         
-        view.addSubview(Searchbar)
+        for Num in 0..<TempItems.count {
+            ListItems.append(ListItem(name: TempItems[Num].name, TimeAdded: TempItems[Num].TimeAdded, LanguageOne: TempItems[Num].LanguageOne, LanguageTwo: TempItems[Num].LanguageTwo, LanguageOneList: TempItems[Num].WordsLanguageOne, LanguageTwoList: TempItems[Num].WordsLanguageTwo))
+        }
+        
+        
         view.addSubview(TableView)
+
     
-        Searchbar.delegate = self
+        title = "Dictionary"
+    
         TableView.delegate = self
         TableView.dataSource = self
+        
+        navigationController?.navigationBar.backgroundColor = .systemBackground
+        
+        navigationItem.searchController = searchcontroller
+        searchcontroller.automaticallyShowsCancelButton = true
+        searchcontroller.searchBar.delegate = self
+        searchcontroller.searchBar.placeholder = "Search..."
+        searchcontroller.searchBar.barStyle = .default
+        searchcontroller.searchResultsUpdater = self
+        searchcontroller.hidesNavigationBarDuringPresentation = false
+        searchcontroller.automaticallyShowsScopeBar = true
+        navigationItem.hidesSearchBarWhenScrolling = false
+                
         
         SetLayout()
         //initializeHideKeyboard()
@@ -58,16 +72,10 @@ class DictionaryMenuViewController: UIViewController {
     
     func SetLayout()
     {
-        
-        
-        Searchbar.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        Searchbar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        Searchbar.widthAnchor.constraint(equalTo: view.safeAreaLayoutGuide.widthAnchor, constant: 0).isActive = true
-        Searchbar.heightAnchor.constraint(equalToConstant: 50).isActive = true
-      
-        TableView.topAnchor.constraint(equalTo: Searchbar.bottomAnchor).isActive = true
-        TableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+            
+        TableView.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor).isActive = true
         TableView.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        TableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20).isActive = true
     
         
     }
@@ -93,15 +101,24 @@ class DictionaryMenuViewController: UIViewController {
 extension DictionaryMenuViewController: UISearchBarDelegate
 {
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        Searchbar.endEditing(true)
+        searchcontroller.searchBar.endEditing(true)
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        Searchbar.endEditing(true)
+        searchcontroller.searchBar.endEditing(true)
     }
     
 }
 
+
+extension DictionaryMenuViewController: UISearchResultsUpdating
+{
+    func updateSearchResults(for searchController: UISearchController) {
+        
+    }
+    
+    
+}
 
 extension DictionaryMenuViewController: UITableViewDelegate, UITableViewDataSource
 {
@@ -111,6 +128,7 @@ extension DictionaryMenuViewController: UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = TableViewCell()
+        cell.SetupWithListItem(Item: ListItems[0])
         
         return cell
     }
@@ -121,7 +139,12 @@ extension DictionaryMenuViewController: UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let vc = WordViewController()
+        let vc = UINavigationController(rootViewController: WordViewController())
+        vc.navigationBar.prefersLargeTitles = true
+        
+        
+        let vc2 = WordViewController()
+    
         present(vc, animated: true, completion: nil)
     }
     
@@ -133,29 +156,38 @@ extension DictionaryMenuViewController: UITableViewDelegate, UITableViewDataSour
 
 class WordViewController: UIViewController
 {
+    
+    let WordOne: UILabel =
+        {
+            let label = UILabel()
+            label.font = .italicSystemFont(ofSize: 15)
+            label.textColor = .green
+            
+            return label
+        }()
+    
+    let WordTwo: UILabel =
+        {
+            let label = UILabel()
+            label.font = .italicSystemFont(ofSize: 15)
+            label.textColor = .green
+            
+            return label
+        }()
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
-        //title = "Your Word:"
+        title = "Your Word:"
         
-        
-        let width = self.view.frame.width
-              
-        let navigationBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 0, width: width, height: 44))
-              
-        self.view.addSubview(navigationBar);
-              
-        let navigationItem = UINavigationItem(title: "Your Word:")
-        
-        let doneBtn = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.close, target: nil, action: #selector(dismissViewController))
-        
-        navigationItem.rightBarButtonItem = doneBtn
-        navigationBar.setItems([navigationItem], animated: false)
+            
       
         
-        navigationController?.navigationBar.prefersLargeTitles = true
     }
+    
+    
     
     
     @objc func dismissViewController()

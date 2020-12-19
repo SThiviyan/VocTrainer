@@ -86,17 +86,12 @@ class NamingViewController: UIViewController
     @objc func GoToRootviewController(){
     //Code to go back to LearnMenuViewController
         StoreEverything()
-        
-        let vc = LearnMenuViewController()
-        
-        vc.collectionView?.reloadData()
-        
         navigationController?.popToRootViewController(animated: true)
     }
     
     func StoreEverything()
     {
-        let List = WordList(name: SectionName, LanguageOne: LanguageOne, LanguageTwo: LanguageTwo, WordsLanguageOne: LanguageOneWords, WordsLanguageTwo: LanguageTwoWords)
+        let List = WordList(name: SectionName, TimeAdded: Date(), LanguageOne: LanguageOne, LanguageTwo: LanguageTwo, WordsLanguageOne: LanguageOneWords, WordsLanguageTwo: LanguageTwoWords)
          
         
         List.SaveItem()

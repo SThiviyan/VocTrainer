@@ -14,6 +14,15 @@ class TableViewCell: UITableViewCell
     
     let accessoryImageView = UIImageView()
     
+    let Label: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 14)
+        label.textAlignment = .left
+        
+        return label
+    }()
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         configure()
@@ -40,8 +49,19 @@ extension TableViewCell
         accessoryImageView.heightAnchor.constraint(equalToConstant: 20).isActive = true
         accessoryImageView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10).isActive = true
         
+        contentView.addSubview(Label)
+        
+        Label.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        Label.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
         
     }
+    
+    func SetupWithListItem(Item: ListItem)
+    {
+        print(Item)
+        Label.text = Item.LanguageOneList[0]
+    }
+    
     
     
 }

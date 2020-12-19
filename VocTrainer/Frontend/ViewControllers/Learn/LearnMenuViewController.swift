@@ -12,19 +12,34 @@ import UIKit
 class LearnMenuViewController: UIViewController
 {
  
-     let AddWordsButton: CustomButton =
-        {
-            let Button = CustomButton()
-            Button.setTitle("Add Words", for: .normal)
-            return Button
-        }()
-    
+  
     enum Section {
         case main
     }
-
-    var dataSource: UICollectionViewDiffableDataSource<Section, Int>! = nil
+    
     var collectionView: UICollectionView! = nil
+    
+    typealias DataSource = UICollectionViewDiffableDataSource<Section, ListItem>
+    typealias DataSourceSnapshot = NSDiffableDataSourceSnapshot<Section, ListItem>
+    
+    
+    let button: UIButton =
+        {
+            let button = UIButton()
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.setImage(UIImage(systemName: "plus.circle" ), for: UIControl.State.normal)
+            button.tintColor = .systemBackground
+            button.imageView?.translatesAutoresizingMaskIntoConstraints = false
+            button.backgroundColor = .cyan
+            button.layer.cornerRadius = 25
+            return button
+        }()
+
+    var dataSource: DataSource!
+    var snapshot = DataSourceSnapshot()
+    
+    var Items = [ListItem]()
+    var Openings = Int()
     
     
     override func viewDidLoad() {
@@ -34,32 +49,225 @@ class LearnMenuViewController: UIViewController
         
         title = "Learn"
         view.backgroundColor = .systemBackground
-                        
-        let addBtn = UIBarButtonItem(barButtonSystemItem: UIBarButtonItem.SystemItem.add, target: self, action: #selector(ButtonTapped))
-        navigationItem.rightBarButtonItem = addBtn
-        
-        
+                    
+    
         configureHierarchy()
         configureDataSource()
+    
+        SetupButton()
+        SetupBarButton()
     }
+    
   
     
-    @objc func ButtonTapped()
-    {
-        let vc = AddWordsViewController()
-        vc.modalPresentationStyle = .fullScreen
-        navigationController?.pushViewController(vc, animated: true)
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(false)
         
+        UserDefaults.standard.setValue(Openings, forKey: "Comparison")
+        
+        if(Openings != DataManager.GetTotalNum(WordList.self))
+        {
+          loaddata()
+        }
     }
+
     
-   
-   
     
 }
 
 
 extension LearnMenuViewController
 {
+    //All the Corrresponding Button Code
+    
+    func SetupButton()
+    {
+        view.addSubview(button)
+        button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        button.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -40).isActive = true
+        button.widthAnchor.constraint(equalToConstant: 55).isActive = true
+        button.heightAnchor.constraint(equalToConstant: 55).isActive = true
+        
+        button.imageView?.centerXAnchor.constraint(equalTo: button.centerXAnchor).isActive = true
+        button.imageView?.centerYAnchor.constraint(equalTo: button.centerYAnchor).isActive = true
+        button.imageView?.topAnchor.constraint(equalTo: button.topAnchor).isActive = true
+        button.imageView?.bottomAnchor.constraint(equalTo: button.bottomAnchor).isActive = true
+        button.imageView?.rightAnchor.constraint(equalTo: button.rightAnchor).isActive = true
+        button.imageView?.leftAnchor.constraint(equalTo: button.leftAnchor).isActive = true
+        
+        button.addTarget(self, action: #selector(ButtonTapped), for: .touchUpInside)
+        
+    }
+    
+    @objc func ButtonTapped()
+    {
+        //Uncomment Comment below if viewcontroller has to change(proprietary)
+        //let vc = AddWordsViewController()
+        //vc.modalPresentationStyle = .fullScreen
+        //navigationController?.pushViewController(vc, animated: true)
+        
+    
+        let TypeAction = UIAlertAction(title: "Type in",
+                    style: .default) { (action) in
+           // Respond to user selection of the action
+            let vc = PickLanguagesViewcontroller()
+            vc.modalPresentationStyle = .fullScreen
+            self.navigationController?.pushViewController(vc, animated: true)
+          }
+        
+        let ScanAction = UIAlertAction(title: "Scan", style: .default) {
+            (action) in
+            let vc = ScanWordsViewController()
+            vc.modalPresentationStyle = .fullScreen
+            self.navigationController?.pushViewController(vc, animated: true)
+        }
+          
+        let cancelAction = UIAlertAction(title: "Cancel",
+                    style: .cancel) { (action) in
+           // Respond to user selection of the action
+        }
+        
+        
+        let alert = UIAlertController(title: "How do you want to add Words?",
+                      message: "",
+           preferredStyle: .actionSheet)
+        
+        alert.addAction(TypeAction)
+        alert.addAction(ScanAction)
+        alert.addAction(cancelAction)
+               
+        
+               
+        self.present(alert, animated: true) {
+             // The alert was presented
+        }
+    }
+    
+    
+    
+    func SetupBarButton()
+    {
+        let SortBtn = UIBarButtonItem(image: UIImage(systemName: "arrow.up.arrow.down.circle"), style: .done, target: self, action: #selector(BarButtonPressed))
+        navigationItem.rightBarButtonItem = SortBtn
+    }
+    
+    @objc func BarButtonPressed()
+    {
+        
+        let CancelAction = UIAlertAction(title: "Cancel", style: .cancel){
+            (action) in
+            
+        }
+        
+        let SortByNameAction = UIAlertAction(title: "Name", style: .default)
+        {
+            (action) in
+            
+            self.SortItemsByName()
+        }
+        
+        let SortByDate = UIAlertAction(title: "Date", style: .default)
+        {
+            (action) in
+            
+            self.SortItemsByDate()
+        }
+        
+        let SortByMostWords = UIAlertAction(title: "Most Words", style: .default)
+        {
+            (action) in
+            
+            self.SortItemsByMostWords()
+        }
+        
+        let SortByLeastWords = UIAlertAction(title: "Least Words", style: .default)
+        {
+            (action) in
+            
+            self.SortItemsByLeastWords()
+        }
+        
+        let Alert = UIAlertController(title: "Sorting Items by", message: "", preferredStyle: .actionSheet)
+        
+        Alert.addAction(CancelAction)
+        Alert.addAction(SortByNameAction)
+        Alert.addAction(SortByDate)
+        Alert.addAction(SortByMostWords)
+        Alert.addAction(SortByLeastWords)
+        
+        self.present(Alert, animated: true)
+        
+    }
+    
+    
+    func SortItemsByName()
+    {
+        Items = Items.sorted(by: {
+            $0.name < $1.name
+        })
+        
+        applySnapshot(Sections: Items)
+    }
+   
+    func SortItemsByDate()
+    {
+        Items = Items.sorted(by: {
+            $0.TimeAdded < $1.TimeAdded
+        })
+        
+        applySnapshot(Sections: Items)
+    }
+    
+    func SortItemsByMostWords()
+    {
+        Items = Items.sorted(by: {
+            $0.LanguageOneList.count > $1.LanguageOneList.count
+        })
+        
+        applySnapshot(Sections: Items)
+    }
+    
+    func SortItemsByLeastWords()
+    {
+        Items = Items.sorted(by: {
+            $0.LanguageOneList.count < $1.LanguageOneList.count
+        })
+        
+        applySnapshot(Sections: Items)
+    }
+}
+
+
+extension LearnMenuViewController
+{
+    
+    func loaddata()
+    {
+        
+        let TempItems = DataManager.LoadAll(WordList.self)
+            .sorted(by: {
+            $0.TimeAdded < $1.TimeAdded
+        })
+        
+        
+       if(Openings == 0)
+       {
+        for Num in 0..<TempItems.count {
+            Items.append(ListItem(name: TempItems[Num].name, TimeAdded: TempItems[Num].TimeAdded, LanguageOne: TempItems[Num].LanguageOne, LanguageTwo: TempItems[Num].LanguageTwo, LanguageOneList: TempItems[Num].WordsLanguageOne, LanguageTwoList: TempItems[Num].WordsLanguageTwo))
+         }
+        
+       }
+    else
+       {
+        Items.append(ListItem(name: TempItems[TempItems.count - 1].name, TimeAdded: TempItems[TempItems.count - 1].TimeAdded, LanguageOne: TempItems[TempItems.count - 1].LanguageOne, LanguageTwo: TempItems[TempItems.count - 1].LanguageTwo, LanguageOneList: TempItems[TempItems.count - 1].WordsLanguageOne, LanguageTwoList: TempItems[TempItems.count - 1].WordsLanguageTwo))
+       }
+        Openings = TempItems.count
+        
+        
+        applySnapshot(Sections: Items)
+        
+    }
+    
     func createLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                     heightDimension: .fractionalHeight(1.0))
@@ -109,60 +317,80 @@ extension LearnMenuViewController
    
     
     func configureDataSource() {
-        dataSource = UICollectionViewDiffableDataSource<Section, Int>(collectionView: collectionView) {
-            (collectionView: UICollectionView, indexPath: IndexPath, identifier: Int) -> UICollectionViewCell? in
+        dataSource = UICollectionViewDiffableDataSource<Section, ListItem>(collectionView: collectionView) {
+            (collectionView: UICollectionView, indexPath: IndexPath, ListItem) -> UICollectionViewCell? in
             
             guard let cell = collectionView.dequeueReusableCell(
                 withReuseIdentifier: LearnCollectionViewCell.reuseidentifier,
                 for: indexPath) as? LearnCollectionViewCell else { fatalError("Cannot create new cell") }
+           
             
-            if(DataManager.GetTotalNum(WordList.self) == 0)
-            {
-                cell.contentView.removeFromSuperview()
-                cell.contentView.addSubview(cell.EmptyLabel)
-                cell.EmptyLabel.textColor = .systemGray
-                cell.contentView.backgroundColor = .systemBlue
-            }
-            else
-            {
-                cell.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.3).cgColor
-                cell.layer.borderWidth = 2
-                cell.layer.borderColor = UIColor.white.cgColor
-                cell.layer.cornerRadius = 20
-                cell.layer.backgroundColor = UIColor.systemBlue.cgColor
-                cell.EmptyLabel.textColor = .systemBlue
-                
-                cell.Button.addTarget(self, action: #selector(self.CellButtonTapped), for: .touchUpInside)
-            }
-    
+            cell.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.3).cgColor
+            cell.layer.borderWidth = 2
+            cell.layer.borderColor = UIColor.white.cgColor
+            cell.layer.cornerRadius = 20
+            cell.layer.backgroundColor = UIColor.systemBlue.cgColor
+         
+            cell.SetupListCell(Item: ListItem)
+            cell.Button.addTarget(self, action: #selector(self.CellButtonTapped), for: .touchUpInside)
+            
+            let vc = PreQuizViewController()
+            vc.SetupListItem(List: ListItem)
+            
+            
             // Return the cell.
             return cell
         }
-
-        // initial data
-        var snapshot = NSDiffableDataSourceSnapshot<Section, Int>()
-        snapshot.appendSections([.main])
-        var CellNum = DataManager.GetTotalNum(WordList.self)
-        
-        if(CellNum == 0)
-        {
-            CellNum = 1
-        }
-        
-        
-        snapshot.appendItems(Array(0..<DataManager.GetTotalNum(WordList.self)))
-        dataSource.apply(snapshot, animatingDifferences: false)
     }
     
     @objc func CellButtonTapped()
     {
-        let vc = UIViewController()
-        vc.view.backgroundColor = .systemRed
+        let vc = PreQuizViewController()
         navigationController?.pushViewController(vc, animated: true)
     }
     
     
+    func applySnapshot(Sections: [ListItem])
+    {
+        snapshot = DataSourceSnapshot()
+        snapshot.appendSections([.main])
+        snapshot.appendItems(Sections)
+        dataSource.apply(snapshot, animatingDifferences: true)
+    }
+    
+  
+    
 }
 
 
+
+class PreQuizViewController: UIViewController
+{
+    
+    var CurrentListItem: ListItem!
+    
+    var Label: UILabel =
+        {
+            let label = UILabel()
+            
+            return label
+        }()
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        view.backgroundColor = .systemBackground
+        
+        navigationController?.navigationBar.prefersLargeTitles = true
+                
+        
+    }
+    
+    
+    public func SetupListItem(List: ListItem)
+    {
+        CurrentListItem = ListItem(name: List.name, TimeAdded: List.TimeAdded, LanguageOne: List.LanguageOne, LanguageTwo: List.LanguageTwo, LanguageOneList: List.LanguageOneList, LanguageTwoList: List.LanguageTwoList)
+    }
+    
+}
 

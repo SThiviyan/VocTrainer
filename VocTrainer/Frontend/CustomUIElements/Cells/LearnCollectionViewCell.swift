@@ -21,7 +21,6 @@ class LearnCollectionViewCell: UICollectionViewCell {
     let NumWordsTitleLabel = UILabel()
     let NumWordsLabel = UILabel()
     
-    let EmptyLabel = UILabel()
     
     override func layoutSubviews() {
         super.layoutSubviews()
@@ -33,7 +32,6 @@ class LearnCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(NamedSectionLabel)
         contentView.addSubview(NumWordsLabel)
         contentView.addSubview(NumWordsTitleLabel)
-        contentView.addSubview(EmptyLabel)
         
         
         Button.layer.cornerRadius = 20
@@ -54,17 +52,17 @@ class LearnCollectionViewCell: UICollectionViewCell {
         LanguageOneLabel.translatesAutoresizingMaskIntoConstraints = false
         LanguageOneLabel.textColor = .white
         LanguageOneLabel.font = .boldSystemFont(ofSize: 15)
-        LanguageOneLabel.text = "LanguageOne"
+        //LanguageOneLabel.text = "LanguageOne"
         
         LanguageTwoLabel.translatesAutoresizingMaskIntoConstraints = false
         LanguageTwoLabel.textColor = .white
         LanguageTwoLabel.font = .boldSystemFont(ofSize: 15)
-        LanguageTwoLabel.text = "LanguageTwo"
+        //LanguageTwoLabel.text = "LanguageTwo"
         
         NamedSectionLabel.translatesAutoresizingMaskIntoConstraints = false
         NamedSectionLabel.textColor = .white
         NamedSectionLabel.font = .boldSystemFont(ofSize: 15)
-        NamedSectionLabel.text = "SectionName"
+        //NamedSectionLabel.text = "SectionName"
         
         sectionNameLabel.translatesAutoresizingMaskIntoConstraints = false
         sectionNameLabel.textColor = .white
@@ -79,12 +77,9 @@ class LearnCollectionViewCell: UICollectionViewCell {
         NumWordsLabel.translatesAutoresizingMaskIntoConstraints = false
         NumWordsLabel.textColor = .white
         NumWordsLabel.font = .boldSystemFont(ofSize: 15)
-        NumWordsLabel.text = "INT"
+        //NumWordsLabel.text = "INT"
         
-        EmptyLabel.translatesAutoresizingMaskIntoConstraints = false
-        EmptyLabel.text = "Please add Words"
-        EmptyLabel.font = .boldSystemFont(ofSize: 16)
-        
+     
         
         
         
@@ -92,7 +87,13 @@ class LearnCollectionViewCell: UICollectionViewCell {
       
     }
     
-    
+    public func SetupListCell(Item: ListItem)
+    {
+        NamedSectionLabel.text = Item.name
+        LanguageOneLabel.text = Item.LanguageOne
+        LanguageTwoLabel.text = Item.LanguageTwo
+        NumWordsLabel.text = String(Item.LanguageOneList.count)
+    }
    
     func SetLayout()
     {
@@ -124,8 +125,7 @@ class LearnCollectionViewCell: UICollectionViewCell {
         NumWordsLabel.leadingAnchor.constraint(equalTo: NumWordsTitleLabel.leadingAnchor).isActive = true
         NumWordsLabel.topAnchor.constraint(equalTo: NumWordsTitleLabel.bottomAnchor, constant: 15).isActive = true
         
-        EmptyLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
-        EmptyLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
+    
         
     }
     

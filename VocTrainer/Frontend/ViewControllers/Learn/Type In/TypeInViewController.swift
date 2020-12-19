@@ -52,6 +52,17 @@ class TypeInViewController: UIViewController
             
             return Label
         }()
+    
+    let ErrorLabel: UILabel =
+        {
+            let Label = UILabel()
+            Label.font = .boldSystemFont(ofSize: 14)
+            Label.translatesAutoresizingMaskIntoConstraints = false
+            Label.textColor = .systemBackground
+            Label.text = "Please Fill the Table Correctly"
+            
+            return Label
+        }()
 
     
     override func viewDidLoad()
@@ -66,6 +77,7 @@ class TypeInViewController: UIViewController
         
         view.addSubview(LabelLanguageOne)
         view.addSubview(LabelLanguagetwo)
+        view.addSubview(ErrorLabel)
                
         configureHierarchy()
         configureDataSource()
@@ -100,6 +112,9 @@ class TypeInViewController: UIViewController
         
         LabelLanguagetwo.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
         LabelLanguagetwo.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
+        
+        ErrorLabel.topAnchor.constraint(equalTo: Continue.bottomAnchor, constant: 20).isActive = true
+        ErrorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
     }
     
     func SortArray()
@@ -220,6 +235,46 @@ extension TypeInViewController
         
     }
     
+    
+    func checkifNumWordsisntOdd() -> Bool
+    {
+        for Num in 0..<texts.count {
+            if(Num == 0)
+            {
+                if(texts[Num] != nil)
+                {
+                    if(texts[Num + 1] != nil)
+                    {
+                      return true
+                    }
+                    else
+                    {
+                      return false
+                    }
+                }
+            }
+            else if(Num % 2 == 0)
+            {
+                if(texts[Num] != nil)
+                {
+                    if(texts[Num + 1] != nil)
+                    {
+                      return true
+                    }
+                    else
+                    {
+                      return false
+                    }
+                }
+            }
+            else
+            {
+                return false
+            }
+        }
+       return false
+        
+    }
     
     
 }

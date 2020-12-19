@@ -30,17 +30,19 @@ class ViewController: UIViewController {
         
         let vc1 = UINavigationController(rootViewController: LearnMenuViewController())
         let vc2 = UINavigationController(rootViewController: MainMenuViewController())
-        let vc3 = DictionaryMenuViewController()
+        let vc3 = UINavigationController(rootViewController: DictionaryMenuViewController())
         
         vc1.navigationBar.prefersLargeTitles = true
         vc2.navigationBar.prefersLargeTitles = true
+        vc3.navigationBar.prefersLargeTitles = true
+    
         
         vc1.title = "Learn"
         vc2.title = "Home"
         vc3.title = "Dictionary"
         
         
-        tabBarVC.setViewControllers([vc2, vc1, vc3], animated: false)
+        tabBarVC.setViewControllers([vc2, vc1, vc3], animated: true)
 
         guard let items = tabBarVC.tabBar.items else {
             return
