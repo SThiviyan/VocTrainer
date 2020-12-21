@@ -27,6 +27,7 @@
 		C57414622544D1A300D771FE /* TypeInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57414612544D1A300D771FE /* TypeInViewController.swift */; };
 		C57414642544D2D800D771FE /* Pods_VocTrainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9F9C2A939DBB6D70FFF2400 /* Pods_VocTrainer.framework */; };
 		C574146E2544DBF700D771FE /* CustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C574146D2544DBF700D771FE /* CustomCell.swift */; };
+		C5768674258E9E5D0095A8CC /* PreQuizViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5768672258E9E5D0095A8CC /* PreQuizViewController.swift */; };
 		C58F06712555D2BA0049B332 /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C58F06702555D2BA0049B332 /* TableViewCell.swift */; };
 		C59F21B0254A2CBE002552F2 /* NamingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59F21AF254A2CBE002552F2 /* NamingViewController.swift */; };
 /* End PBXBuildFile section */
@@ -55,6 +56,7 @@
 		C574145D2544D10C00D771FE /* ScanViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScanViewController.swift; sourceTree = "<group>"; };
 		C57414612544D1A300D771FE /* TypeInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeInViewController.swift; sourceTree = "<group>"; };
 		C574146D2544DBF700D771FE /* CustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCell.swift; sourceTree = "<group>"; };
+		C5768672258E9E5D0095A8CC /* PreQuizViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreQuizViewController.swift; sourceTree = "<group>"; };
 		C58F06702555D2BA0049B332 /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
 		C59F21AF254A2CBE002552F2 /* NamingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamingViewController.swift; sourceTree = "<group>"; };
 		C9F9C2A939DBB6D70FFF2400 /* Pods_VocTrainer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_VocTrainer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -182,6 +184,7 @@
 		C550C6B12538CEBA00EE103E /* Learn */ = {
 			isa = PBXGroup;
 			children = (
+				C5768678258E9E820095A8CC /* QuizViewControllers */,
 				C57414592544D04700D771FE /* Scan */,
 				C57414582544D02000D771FE /* Type In */,
 				C550C6A32538C70900EE103E /* LearnMenuViewController.swift */,
@@ -214,6 +217,14 @@
 				C574145D2544D10C00D771FE /* ScanViewController.swift */,
 			);
 			path = Scan;
+			sourceTree = "<group>";
+		};
+		C5768678258E9E820095A8CC /* QuizViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				C5768672258E9E5D0095A8CC /* PreQuizViewController.swift */,
+			);
+			path = QuizViewControllers;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -329,6 +340,7 @@
 				C550C6902537168200EE103E /* CustomButton.swift in Sources */,
 				C58F06712555D2BA0049B332 /* TableViewCell.swift in Sources */,
 				C59F21B0254A2CBE002552F2 /* NamingViewController.swift in Sources */,
+				C5768674258E9E5D0095A8CC /* PreQuizViewController.swift in Sources */,
 				C57414622544D1A300D771FE /* TypeInViewController.swift in Sources */,
 				C54282FC25573E3300A50DAF /* WordList.swift in Sources */,
 			);

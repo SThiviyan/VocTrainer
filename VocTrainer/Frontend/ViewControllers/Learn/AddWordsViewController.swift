@@ -11,6 +11,8 @@ import AVKit
 
 //just to commit files to github
 
+//ViewController is Irrelevant because its not in use
+
 class AddWordsViewController: UIViewController{
 
   

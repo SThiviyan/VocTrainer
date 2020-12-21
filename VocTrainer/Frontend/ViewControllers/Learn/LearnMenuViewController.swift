@@ -30,7 +30,7 @@ class LearnMenuViewController: UIViewController
             button.setImage(UIImage(systemName: "plus.circle" ), for: UIControl.State.normal)
             button.tintColor = .systemBackground
             button.imageView?.translatesAutoresizingMaskIntoConstraints = false
-            button.backgroundColor = .cyan
+            button.backgroundColor = .systemBlue
             button.layer.cornerRadius = 25
             return button
         }()
@@ -41,6 +41,11 @@ class LearnMenuViewController: UIViewController
     var Items = [ListItem]()
     var Openings = Int()
     
+   
+    let searchcontroller = UISearchController(searchResultsController: nil)
+    var filteredListItems = [ListItem]()
+
+
     
     override func viewDidLoad() {
         
@@ -56,6 +61,7 @@ class LearnMenuViewController: UIViewController
     
         SetupButton()
         SetupBarButton()
+        SetupBarSearchBar()
     }
     
   
@@ -71,6 +77,53 @@ class LearnMenuViewController: UIViewController
         }
     }
 
+    
+    
+}
+
+
+extension LearnMenuViewController: UISearchControllerDelegate, UISearchBarDelegate, UISearchResultsUpdating
+{
+    
+    func SetupBarSearchBar()
+    {
+        navigationItem.searchController = searchcontroller
+        navigationItem.searchController?.automaticallyShowsCancelButton = true
+        navigationItem.searchController?.delegate = self
+        navigationItem.searchController?.searchBar.delegate = self
+        navigationItem.hidesSearchBarWhenScrolling = false
+        navigationItem.searchController?.searchResultsUpdater = self
+        navigationItem.searchController?.searchBar.placeholder = "Search..."
+        navigationItem.searchController?.obscuresBackgroundDuringPresentation = false
+        navigationItem.searchController?.definesPresentationContext = true
+    }
+    
+    var isSearchBarEmpty: Bool
+    {
+        return searchcontroller.searchBar.text?.isEmpty ?? true
+    }
+    
+    func filterContentForSearchText(_ searchText: String) {
+      filteredListItems = Items.filter { (Items: ListItem) -> Bool in
+        return Items.name.lowercased().contains(searchText.lowercased())
+      }
+        
+      
+        applySnapshot(Sections: filteredListItems)
+    }
+    
+    
+ 
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+                
+        //applySnapshot(Sections: Items)
+        print(Items)
+    }
+    
+    
+    func updateSearchResults(for searchController: UISearchController) {
+        filterContentForSearchText(searchController.searchBar.text ?? "")
+    }
     
     
 }
@@ -147,7 +200,7 @@ extension LearnMenuViewController
     
     func SetupBarButton()
     {
-        let SortBtn = UIBarButtonItem(image: UIImage(systemName: "arrow.up.arrow.down.circle"), style: .done, target: self, action: #selector(BarButtonPressed))
+        let SortBtn = UIBarButtonItem(image: UIImage(systemName: "tray.full"), style: .done, target: self, action: #selector(BarButtonPressed))
         navigationItem.rightBarButtonItem = SortBtn
     }
     
@@ -337,6 +390,7 @@ extension LearnMenuViewController
             let vc = PreQuizViewController()
             vc.SetupListItem(List: ListItem)
             
+          
             
             // Return the cell.
             return cell
@@ -356,40 +410,6 @@ extension LearnMenuViewController
         snapshot.appendSections([.main])
         snapshot.appendItems(Sections)
         dataSource.apply(snapshot, animatingDifferences: true)
-    }
-    
-  
-    
-}
-
-
-
-class PreQuizViewController: UIViewController
-{
-    
-    var CurrentListItem: ListItem!
-    
-    var Label: UILabel =
-        {
-            let label = UILabel()
-            
-            return label
-        }()
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        view.backgroundColor = .systemBackground
-        
-        navigationController?.navigationBar.prefersLargeTitles = true
-                
-        
-    }
-    
-    
-    public func SetupListItem(List: ListItem)
-    {
-        CurrentListItem = ListItem(name: List.name, TimeAdded: List.TimeAdded, LanguageOne: List.LanguageOne, LanguageTwo: List.LanguageTwo, LanguageOneList: List.LanguageOneList, LanguageTwoList: List.LanguageTwoList)
     }
     
 }
