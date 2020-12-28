@@ -39,8 +39,9 @@ class LearnMenuViewController: UIViewController
     var snapshot = DataSourceSnapshot()
     
     var Items = [ListItem]()
-    var Openings = Int()
+    var BlackListNums = [Int]()
     
+    var BlackList = [ListItem]()
    
     let searchcontroller = UISearchController(searchResultsController: nil)
     var filteredListItems = [ListItem]()
@@ -62,21 +63,79 @@ class LearnMenuViewController: UIViewController
         SetupButton()
         SetupBarButton()
         SetupBarSearchBar()
+        
+        //loaddata()
+
+        
     }
     
-  
-    
+   
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(false)
         
-        UserDefaults.standard.setValue(Openings, forKey: "Comparison")
         
-        if(Openings != DataManager.GetTotalNum(WordList.self))
-        {
-          loaddata()
+        let TempData = DataManager.LoadAll(WordList.self)
+            .sorted(by: {
+            $0.TimeAdded < $1.TimeAdded
+        })
+        
+        var compareList = [ListItem]()
+        
+        for Num in 0..<TempData.count {
+            compareList.append(ListItem(name: TempData[Num].name, TimeAdded: TempData[Num].TimeAdded, LanguageOne: TempData[Num].LanguageOne, LanguageTwo: TempData[Num].LanguageTwo, LanguageOneList: TempData[Num].WordsLanguageOne, LanguageTwoList: TempData[Num].WordsLanguageTwo))
         }
-    }
+        
+        compareList.append(contentsOf: Items)
+        
+        Items = Array(Set(compareList))
+        
+        Items = Items.sorted(by: {
+            $0.TimeAdded < $1.TimeAdded
+        })
+        
+        
+        if(Items.count > TempData.count)
+        {
+            
+            var CheckInts = [Int]()
+           
+            if(TempData.count != 0)
+            {
+              for item in 0..<Items.count
+              {
+                CheckInts.append(0)
+                  for Num in 0..<TempData.count {
+                     
+                    if(Items[item].name == TempData[Num].name)
+                    {
+                        CheckInts[item] += 1
+                    }
+                    
+                  }
+                
+              }
+                
+                for item in 0..<Items.count {
+                    if(CheckInts[item] == 0)
+                    {
+                        Items.remove(at: item)
+                    }
+                }
+                
+                
+            }
+            else
+            {
+                Items.removeAll()
+            }
+            
+        }
+      
+     
+        applySnapshot(Sections: Items)
 
+        
+    }
     
     
 }
@@ -113,16 +172,12 @@ extension LearnMenuViewController: UISearchControllerDelegate, UISearchBarDelega
     }
     
     
- 
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-                
-        //applySnapshot(Sections: Items)
-        print(Items)
-    }
-    
-    
     func updateSearchResults(for searchController: UISearchController) {
         filterContentForSearchText(searchController.searchBar.text ?? "")
+        if(searchcontroller.searchBar.text == "")
+        {
+            applySnapshot(Sections: Items)
+        }
     }
     
     
@@ -189,7 +244,7 @@ extension LearnMenuViewController
         alert.addAction(ScanAction)
         alert.addAction(cancelAction)
                
-        
+        alert.popoverPresentationController?.sourceView = button
                
         self.present(alert, animated: true) {
              // The alert was presented
@@ -200,7 +255,7 @@ extension LearnMenuViewController
     
     func SetupBarButton()
     {
-        let SortBtn = UIBarButtonItem(image: UIImage(systemName: "tray.full"), style: .done, target: self, action: #selector(BarButtonPressed))
+        let SortBtn = UIBarButtonItem(image: UIImage(systemName: "arrow.up.arrow.down"), style: .done, target: self, action: #selector(BarButtonPressed))
         navigationItem.rightBarButtonItem = SortBtn
     }
     
@@ -219,7 +274,7 @@ extension LearnMenuViewController
             self.SortItemsByName()
         }
         
-        let SortByDate = UIAlertAction(title: "Date", style: .default)
+        let SortByDate = UIAlertAction(title: "Date Created", style: .default)
         {
             (action) in
             
@@ -247,6 +302,8 @@ extension LearnMenuViewController
         Alert.addAction(SortByDate)
         Alert.addAction(SortByMostWords)
         Alert.addAction(SortByLeastWords)
+        
+        Alert.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
         
         self.present(Alert, animated: true)
         
@@ -302,20 +359,11 @@ extension LearnMenuViewController
             $0.TimeAdded < $1.TimeAdded
         })
         
-        
-       if(Openings == 0)
-       {
+       
         for Num in 0..<TempItems.count {
             Items.append(ListItem(name: TempItems[Num].name, TimeAdded: TempItems[Num].TimeAdded, LanguageOne: TempItems[Num].LanguageOne, LanguageTwo: TempItems[Num].LanguageTwo, LanguageOneList: TempItems[Num].WordsLanguageOne, LanguageTwoList: TempItems[Num].WordsLanguageTwo))
-         }
-        
-       }
-    else
-       {
-        Items.append(ListItem(name: TempItems[TempItems.count - 1].name, TimeAdded: TempItems[TempItems.count - 1].TimeAdded, LanguageOne: TempItems[TempItems.count - 1].LanguageOne, LanguageTwo: TempItems[TempItems.count - 1].LanguageTwo, LanguageOneList: TempItems[TempItems.count - 1].WordsLanguageOne, LanguageTwoList: TempItems[TempItems.count - 1].WordsLanguageTwo))
-       }
-        Openings = TempItems.count
-        
+        }
+     
         
         applySnapshot(Sections: Items)
         
@@ -386,6 +434,7 @@ extension LearnMenuViewController
          
             cell.SetupListCell(Item: ListItem)
             cell.Button.addTarget(self, action: #selector(self.CellButtonTapped), for: .touchUpInside)
+            cell.Button.tag = indexPath.row
             
             let vc = PreQuizViewController()
             vc.SetupListItem(List: ListItem)
@@ -397,9 +446,17 @@ extension LearnMenuViewController
         }
     }
     
-    @objc func CellButtonTapped()
+    @objc func CellButtonTapped(sender: UIButton)
     {
         let vc = PreQuizViewController()
+        if(searchcontroller.searchBar.text != "")
+        {
+            vc.SetupListItem(List: filteredListItems[sender.tag])
+        }
+        else
+        {
+            vc.SetupListItem(List: Items[sender.tag])
+        }
         navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -412,5 +469,9 @@ extension LearnMenuViewController
         dataSource.apply(snapshot, animatingDifferences: true)
     }
     
+
+    
 }
+
+
 

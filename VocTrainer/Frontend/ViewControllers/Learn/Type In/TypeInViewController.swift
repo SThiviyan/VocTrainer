@@ -137,6 +137,21 @@ class TypeInViewController: UIViewController
         LanguageOneTexts.remove(at: 0)
         LanguageTwoTexts.remove(at: 0)
         
+        for item in 0..<LanguageOneTexts.count
+        {
+            if(LanguageOneTexts[item] == "")
+            {
+                LanguageOneTexts.remove(at: item)
+            }
+        }
+       
+        for item in 0..<LanguageTwoTexts.count
+        {
+            if(LanguageTwoTexts[item] == "")
+            {
+                LanguageTwoTexts.remove(at: item)
+            }
+        }
     }
 
 }

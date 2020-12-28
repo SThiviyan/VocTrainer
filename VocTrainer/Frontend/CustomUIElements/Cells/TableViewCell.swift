@@ -56,10 +56,9 @@ extension TableViewCell
         
     }
     
-    func SetupWithListItem(Item: ListItem)
+    func SetupWithListItem(Item: String)
     {
-        print(Item)
-        Label.text = Item.LanguageOneList[0]
+        Label.text = Item
     }
     
     

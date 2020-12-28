@@ -12,8 +12,12 @@ import UIKit
 class DictionaryMenuViewController: UIViewController {
     
     var ListItems = [ListItem]()
-    let ListStrings = [String]()
-
+    
+    var AllLanguages = [String]()
+    
+    //Words that are shown in the Tableview
+    var Words = [String]()
+    var filteredListItems = [String]()
  
     let TableView : UITableView =
         {
@@ -34,13 +38,6 @@ class DictionaryMenuViewController: UIViewController {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
-
-        let TempItems = DataManager.LoadAll(WordList.self)
-        
-        for Num in 0..<TempItems.count {
-            ListItems.append(ListItem(name: TempItems[Num].name, TimeAdded: TempItems[Num].TimeAdded, LanguageOne: TempItems[Num].LanguageOne, LanguageTwo: TempItems[Num].LanguageTwo, LanguageOneList: TempItems[Num].WordsLanguageOne, LanguageTwoList: TempItems[Num].WordsLanguageTwo))
-        }
-        
         
         view.addSubview(TableView)
 
@@ -61,13 +58,58 @@ class DictionaryMenuViewController: UIViewController {
         searchcontroller.hidesNavigationBarDuringPresentation = false
         searchcontroller.automaticallyShowsScopeBar = true
         navigationItem.hidesSearchBarWhenScrolling = false
-                
+        
+       
+        searchcontroller.searchBar.showsScopeBar = true
+        searchcontroller.searchBar.sizeToFit()
+        searchcontroller.obscuresBackgroundDuringPresentation = false
+        
+
+       
         
         SetLayout()
         //initializeHideKeyboard()
         
+        
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(false)
+        
+        
+        let TempItems = DataManager.LoadAll(WordList.self)
+        
+        for Num in 0..<TempItems.count {
+            ListItems.append(ListItem(name: TempItems[Num].name, TimeAdded: TempItems[Num].TimeAdded, LanguageOne: TempItems[Num].LanguageOne, LanguageTwo: TempItems[Num].LanguageTwo, LanguageOneList: TempItems[Num].WordsLanguageOne, LanguageTwoList: TempItems[Num].WordsLanguageTwo))
+        }
+        
+        
+        SetupLanguagesArray()
+        
+        searchcontroller.searchBar.scopeButtonTitles = AllLanguages
+        
+        AddWordstoTableView()
+
+    }
+    
+    func SetupLanguagesArray()
+    {
+    
+        
+        for item in 0..<ListItems.count
+        {
+            AllLanguages.append(ListItems[item].LanguageOne)
+            AllLanguages.append(ListItems[item].LanguageTwo)
+        }
+        
+       
+        //Important!!!! Removes all double from Array
+        AllLanguages = Array(Set(AllLanguages))
+        
+        AllLanguages = AllLanguages.sorted(by: {
+            $0 < $1
+        })
+    }
    
     
     func SetLayout()
@@ -115,20 +157,51 @@ extension DictionaryMenuViewController: UISearchResultsUpdating
 {
     func updateSearchResults(for searchController: UISearchController) {
         
+        filterContentForSearchText(searchcontroller.searchBar.text ?? "Empty")
+        
+        if(searchcontroller.searchBar.text == "")
+        {
+            AddWordstoTableView()
+            TableView.reloadData()
+        }
+        
     }
     
+    
+    func filterContentForSearchText(_ searchText: String) {
+       
+        filteredListItems = Words.filter { Words -> Bool in
+        return Words.lowercased().contains(searchText.lowercased())
+       }
+        
+       Words = filteredListItems
+       
+       TableView.reloadData()
+    }
+    
+    
+    
+    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
+        AddWordstoTableView()
+        TableView.reloadData()
+    }
     
 }
 
 extension DictionaryMenuViewController: UITableViewDelegate, UITableViewDataSource
 {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 20
+        return Words.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = TableViewCell()
-        cell.SetupWithListItem(Item: ListItems[0])
+        
+        if(Words.count == tableView.numberOfRows(inSection: 0))
+        {
+          cell.SetupWithListItem(Item: Words[indexPath.row])
+        }
+      
         
         return cell
     }
@@ -149,9 +222,42 @@ extension DictionaryMenuViewController: UITableViewDelegate, UITableViewDataSour
     }
     
     
-
     
+    func SetupTableViewWords(LanguageOne: String) -> [String]
+    {
+       var Words = [String]()
+        
+        for item in 0..<ListItems.count
+        {
+            if(ListItems[item].LanguageOne == LanguageOne)
+            {
+                Words.append(contentsOf: ListItems[item].LanguageOneList)
+            }
+            else if(ListItems[item].LanguageTwo == LanguageOne)
+            {
+                Words.append(contentsOf: ListItems[item].LanguageTwoList)
+            }
+        }
+        
+        Words = Array(Set(Words))
+        
+        Words = Words.sorted(by: {
+            $0 < $1
+        })
+        
+       return Words
+    }
+    
+    func AddWordstoTableView()
+    {
+        let indexNum = searchcontroller.searchBar.selectedScopeButtonIndex
+        if(indexNum > -1)
+        {
+        Words = SetupTableViewWords(LanguageOne: AllLanguages[indexNum])
+        }
+    }
 }
+
 
 
 class WordViewController: UIViewController

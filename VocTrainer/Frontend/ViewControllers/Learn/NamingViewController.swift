@@ -48,6 +48,18 @@ class NamingViewController: UIViewController
             return Textfield
         }()
     
+    let ErrorLabel: UILabel =
+        {
+            let Label = UILabel()
+            Label.text = "Name is already in use"
+            Label.font = .boldSystemFont(ofSize: 14)
+            Label.textColor = .systemRed
+            Label.translatesAutoresizingMaskIntoConstraints = false
+            
+            
+            return Label
+        }()
+    
     
     override func viewDidLoad() {
         view.backgroundColor = .systemBackground
@@ -60,6 +72,7 @@ class NamingViewController: UIViewController
         view.addSubview(Label)
         view.addSubview(TextField)
         TextField.delegate = self
+        
         
         setLayout()
         initializeHideKeyboard()
@@ -85,17 +98,42 @@ class NamingViewController: UIViewController
     
     @objc func GoToRootviewController(){
     //Code to go back to LearnMenuViewController
-        StoreEverything()
-        navigationController?.popToRootViewController(animated: true)
+        if(CheckIfValid())
+        {
+          ErrorLabel.removeFromSuperview()
+          StoreEverything()
+          navigationController?.popToRootViewController(animated: true)
+        }
+        else
+        {
+            view.addSubview(ErrorLabel)
+            ErrorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+            ErrorLabel.bottomAnchor.constraint(equalTo: FinishButton.topAnchor, constant: -30).isActive = true
+        }
     }
     
     func StoreEverything()
     {
         let List = WordList(name: SectionName, TimeAdded: Date(), LanguageOne: LanguageOne, LanguageTwo: LanguageTwo, WordsLanguageOne: LanguageOneWords, WordsLanguageTwo: LanguageTwoWords)
          
-        
         List.SaveItem()
      }
+    
+    
+    func CheckIfValid() -> Bool
+    {
+        let Data = DataManager.LoadAll(WordList.self)
+        
+        for item in 0..<Data.count
+        {
+            if(Data[item].name == SectionName)
+            {
+                return false
+            }
+        }
+        
+        return true
+    }
     
 }
 
