@@ -29,6 +29,7 @@ class PreQuizViewController: UIViewController
 
     
     
+    
     enum Section {
         case main
     }
@@ -46,8 +47,8 @@ class PreQuizViewController: UIViewController
         {
             let label = UILabel()
             label.translatesAutoresizingMaskIntoConstraints = false
-            label.textColor = .systemRed
             label.text = "LanguageOne"
+            label.font = .boldSystemFont(ofSize: 17)
             return label
         }()
     
@@ -55,8 +56,8 @@ class PreQuizViewController: UIViewController
         {
             let label = UILabel()
             label.translatesAutoresizingMaskIntoConstraints = false
-            label.textColor = .systemRed
             label.text = "LanguageTwo"
+            label.font = .boldSystemFont(ofSize: 17)
             return label
         }()
     
@@ -69,14 +70,31 @@ class PreQuizViewController: UIViewController
             return Button
         }()
     
+    var SegmentControl: UISegmentedControl =
+        {
+            let view = UISegmentedControl()
+            view.translatesAutoresizingMaskIntoConstraints = false
+            
+            return view
+        }()
   
+    let errorLabel: UILabel =
+    {
+            let label = UILabel()
+            label.text = "Please select an order"
+            label.textColor = .systemRed
+            label.translatesAutoresizingMaskIntoConstraints = false
+            label.font = .boldSystemFont(ofSize: 14)
+            label.numberOfLines = 0
+            return label
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
         
-        ScrollViewLength = Int(view.bounds.midY * 0.65)
+        ScrollViewLength += Int(view.bounds.midY * 0.65)
         
         title = CurrentListItem.name
         LabelLanguageOne.text = CurrentListItem.LanguageOne
@@ -89,10 +107,23 @@ class PreQuizViewController: UIViewController
         ConfigureCollectionViewHierarchy()
         SetupHierarchyofButton()
         
-        ContentView.sizeToFit()
         
         ConfigureDataSource()
+        
+        SetupPopUpView()
+        
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        tabBarController?.tabBar.isHidden = false
+        navigationController?.navigationBar.isHidden = false
+        
+        PopupView.topAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        PopupView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.75).isActive = true
+        
+        errorLabel.isHidden = true
+    }
+  
     
     func SetupHierachy()
     {
@@ -135,8 +166,8 @@ class PreQuizViewController: UIViewController
         
         
         ContentView.addSubview(LabelLanguageTwo)
-        LabelLanguageTwo.topAnchor.constraint(equalTo: LabelLanguageOne.bottomAnchor, constant: 10).isActive = true
-        LabelLanguageTwo.leadingAnchor.constraint(equalTo: LabelLanguageOne.leadingAnchor).isActive = true
+        LabelLanguageTwo.topAnchor.constraint(equalTo: FirstAssignedView.topAnchor, constant: 20).isActive = true
+        LabelLanguageTwo.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
         
       
        
@@ -147,14 +178,70 @@ class PreQuizViewController: UIViewController
     func SetupHierarchyofButton()
     {
        
+        ContentView.addSubview(SegmentControl)
+        SegmentControl.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        SegmentControl.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 10).isActive = true
+        SegmentControl.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.75).isActive = true
+        SegmentControl.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.075).isActive = true
+        
+        let FirstSegmentString = "\(LabelLanguageOne.text ?? "One") to \(LabelLanguageTwo.text ?? "Two")"
+        let SecondSegmentString = "\(LabelLanguageTwo.text ?? "Two") to \(LabelLanguageOne.text ?? "One")"
+        
+        SegmentControl.insertSegment(withTitle: FirstSegmentString, at: 0, animated: true)
+        SegmentControl.insertSegment(withTitle: SecondSegmentString, at: 1, animated: true)
+        
+        
+        
         ContentView.addSubview(Button)
         
         Button.centerXAnchor.constraint(equalTo: ContentView.centerXAnchor).isActive = true
-        Button.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 20).isActive = true
+        Button.topAnchor.constraint(equalTo: SegmentControl.bottomAnchor, constant: 30).isActive = true
         Button.heightAnchor.constraint(equalToConstant: 60).isActive = true
         Button.widthAnchor.constraint(equalToConstant: 350).isActive = true
+        
+        Button.addTarget(self, action: #selector(StartButtonTapped), for: .touchUpInside)
+        
+        
+        ContentView.addSubview(errorLabel)
+    
+        
+        errorLabel.centerXAnchor.constraint(equalTo: FirstAssignedView.centerXAnchor).isActive = true
+        errorLabel.topAnchor.constraint(equalTo: Button.bottomAnchor, constant: 10).isActive = true
+          
     }
     
+}
+
+extension PreQuizViewController
+{
+    @objc func StartButtonTapped()
+    {
+        if(SegmentControl.selectedSegmentIndex == -1)
+        {
+            errorLabel.isHidden = false
+        }
+        else
+        {
+          let vc = QuizViewController()
+            
+            errorLabel.isHidden = true
+            
+            if(SegmentControl.selectedSegmentIndex == 0)
+            {
+                vc.LanguageOneWords = CurrentListItem.LanguageOneList
+                vc.LanguageTwoWords = CurrentListItem.LanguageTwoList
+            }
+            else
+            {
+                vc.LanguageOneWords = CurrentListItem.LanguageTwoList
+                vc.LanguageTwoWords = CurrentListItem.LanguageOneList
+                
+            }
+        
+          tabBarController?.tabBar.isHidden = true
+          navigationController?.pushViewController(vc, animated: true)
+        }
+    }
 }
 
 
@@ -218,7 +305,14 @@ extension PreQuizViewController
         
         let EditLanguagesAction = UIAlertAction(title: "Edit Languages", style: .default)
         { (action) in
-            self.SetupPopUpView()
+            
+            self.tabBarController?.tabBar.isHidden = true
+            self.LetPopUpViewAppear()
+            
+            //let vc = UIViewController()
+            //vc.view.backgroundColor = .systemBackground
+            //self.navigationController?.present(vc, animated: true, completion: nil)
+            
         }
         
         let CancelAction = UIAlertAction(title: "Cancel", style: .cancel)
@@ -313,6 +407,8 @@ extension PreQuizViewController
             {
                 cell.TextField.text = self.CombinedArray[Num]
             }
+            
+            cell.TextField.isEnabled = false
         
             return cell
         }
@@ -351,28 +447,83 @@ extension PreQuizViewController
     
     func SetupPopUpView()
     {
+        PopupView.isHidden = false
+
         view.addSubview(PopupView)
-        
-        
+
         PopupView.translatesAutoresizingMaskIntoConstraints = false
-        
-        PopupView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        PopupView.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-        PopupView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
-        PopupView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
-        PopupView.topAnchor.constraint(equalTo: view.topAnchor, constant: 20).isActive = true
-        PopupView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20).isActive = true
-        
+        PopupView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
+        PopupView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
+       
         PopupView.layer.cornerRadius = 20
+        PopupView.layer.borderColor = UIColor.white.cgColor
+        PopupView.layer.borderWidth = 2.5
         
-        PopupView.bringSubviewToFront(view)
+        
+        PopupView.backgroundColor = .systemBackground
+        
+        let Button = UIButton()
         
         
-        PopupView.backgroundColor = .systemRed
-    
+        //Button.setTitle("Dismiss", for: .normal)
+        Button.setImage(UIImage(systemName: "xmark"), for: .normal)
+        Button.tintColor = .systemGray
+        
+        
+        Button.addTarget(self, action: #selector(PopUpViewCancelButtonTapped), for: .touchUpInside)
+        
+        PopupView.addSubview(Button)
+        
+        Button.translatesAutoresizingMaskIntoConstraints = false
+        Button.trailingAnchor.constraint(equalTo: PopupView.trailingAnchor, constant: -20).isActive = true
+        Button.topAnchor.constraint(equalTo: PopupView.topAnchor, constant: 20).isActive = true
+        
         
     }
     
+    func LetPopUpViewAppear()
+    {
+    
+        PopupView.isHidden = false
+
+        PopupView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
+       
+        
+        UIView.animate(withDuration: 0.2,
+                       delay: 0.0,
+                       options: .curveEaseInOut,
+                       animations: {
+                        self.view.layoutIfNeeded()
+                       },
+                       completion: nil
+                        )
+          
+    
+        
+       
+    }
+    
+
+    
+    @objc func PopUpViewCancelButtonTapped()
+    {
+        PopupView.topAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
+        UIView.animate(withDuration: 0.2,
+                       delay: 0.0,
+                       options: .curveEaseOut,
+                       animations:
+                        {
+                            self.view.layoutIfNeeded()
+                        },
+                       completion: nil)
+        
+        PopupView.isHidden = true
+        //self.navigationController?.setNavigationBarHidden(false, animated: true)
+        self.tabBarController?.tabBar.isHidden = false
+    }
     
     
 }
+
+

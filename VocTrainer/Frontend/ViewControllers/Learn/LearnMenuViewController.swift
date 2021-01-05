@@ -69,6 +69,12 @@ class LearnMenuViewController: UIViewController
         
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        AnimateCellsAppearance()
+        
+    }
    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(false)
@@ -135,6 +141,13 @@ class LearnMenuViewController: UIViewController
         applySnapshot(Sections: Items)
 
         
+        NSLayoutConstraint.activate([
+            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.widthAnchor.constraint(equalTo: view.widthAnchor)
+        ])
+    
     }
     
     
@@ -155,6 +168,7 @@ extension LearnMenuViewController: UISearchControllerDelegate, UISearchBarDelega
         navigationItem.searchController?.searchBar.placeholder = "Search..."
         navigationItem.searchController?.obscuresBackgroundDuringPresentation = false
         navigationItem.searchController?.definesPresentationContext = true
+        navigationItem.searchController?.searchBar.returnKeyType = .search
     }
     
     var isSearchBarEmpty: Bool
@@ -351,24 +365,6 @@ extension LearnMenuViewController
 extension LearnMenuViewController
 {
     
-    func loaddata()
-    {
-        
-        let TempItems = DataManager.LoadAll(WordList.self)
-            .sorted(by: {
-            $0.TimeAdded < $1.TimeAdded
-        })
-        
-       
-        for Num in 0..<TempItems.count {
-            Items.append(ListItem(name: TempItems[Num].name, TimeAdded: TempItems[Num].TimeAdded, LanguageOne: TempItems[Num].LanguageOne, LanguageTwo: TempItems[Num].LanguageTwo, LanguageOneList: TempItems[Num].WordsLanguageOne, LanguageTwoList: TempItems[Num].WordsLanguageTwo))
-        }
-     
-        
-        applySnapshot(Sections: Items)
-        
-    }
-    
     func createLayout() -> UICollectionViewLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                     heightDimension: .fractionalHeight(1.0))
@@ -403,16 +399,12 @@ extension LearnMenuViewController
         collectionView.register(LearnCollectionViewCell.self, forCellWithReuseIdentifier: LearnCollectionViewCell.reuseidentifier)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.indexDisplayMode = .automatic
+        collectionView.delegate = self
         
         view.addSubview(collectionView)
         
-        NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
-            collectionView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            collectionView.widthAnchor.constraint(equalTo: view.widthAnchor)
-            
-        ])
+        
+
     }
     
    
@@ -475,3 +467,25 @@ extension LearnMenuViewController
 
 
 
+extension LearnMenuViewController: UICollectionViewDelegate
+{
+    func AnimateCellsAppearance()
+    {
+       
+        collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        
+        UIView.animate(withDuration: 0.2)
+        {
+            self.view.layoutIfNeeded()
+        }
+               
+    }
+        
+    
+    
+
+           
+        
+    
+    
+}

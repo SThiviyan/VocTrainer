@@ -175,6 +175,7 @@ extension DictionaryMenuViewController: UISearchResultsUpdating
        }
         
        Words = filteredListItems
+        
        
        TableView.reloadData()
     }
@@ -212,12 +213,10 @@ extension DictionaryMenuViewController: UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        let vc = UINavigationController(rootViewController: WordViewController())
-        vc.navigationBar.prefersLargeTitles = true
+        let vc = WordViewController()
+        //vc.navigationBar.prefersLargeTitles = true
+        vc.SetupTitle(titleOfVC: Words[indexPath.row])
         
-        
-        let vc2 = WordViewController()
-    
         present(vc, animated: true, completion: nil)
     }
     
@@ -256,12 +255,32 @@ extension DictionaryMenuViewController: UITableViewDelegate, UITableViewDataSour
         Words = SetupTableViewWords(LanguageOne: AllLanguages[indexNum])
         }
     }
+    
+    
 }
 
 
 
 class WordViewController: UIViewController
 {
+    let TitleLabel: UILabel =
+        {
+           let label = UILabel()
+            label.font = .boldSystemFont(ofSize: 37)
+            label.translatesAutoresizingMaskIntoConstraints = false
+            
+            return label
+        }()
+    
+    let AnotherLabel: UILabel =
+        {
+            let label = UILabel()
+            label.font = .boldSystemFont(ofSize: 15)
+            label.text = "All translations found:"
+            label.translatesAutoresizingMaskIntoConstraints = false
+            
+            return label
+        }()
     
     let WordOne: UILabel =
         {
@@ -286,15 +305,31 @@ class WordViewController: UIViewController
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
-        title = "Your Word:"
+        //title = "Your Word:"
         
             
       
         
     }
     
+    func SetupTitle(titleOfVC: String)
+    {
+        view.addSubview(TitleLabel)
+        TitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30).isActive = true
+        TitleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 40).isActive = true
+        TitleLabel.text = titleOfVC
+        
+        SetupOtherLabels()
+    }
     
     
+    func SetupOtherLabels()
+    {
+        view.addSubview(AnotherLabel)
+        AnotherLabel.topAnchor.constraint(equalTo: TitleLabel.bottomAnchor, constant: 40).isActive = true
+        AnotherLabel.leadingAnchor.constraint(equalTo: TitleLabel.leadingAnchor).isActive = true
+        
+    }
     
     @objc func dismissViewController()
     {
