@@ -342,7 +342,7 @@ extension QuizViewController: UITextFieldDelegate
         
         navigationController?.navigationBar.isHidden = true
         
-        animateViewMoving(up: true, moveValue: 100)
+        animateViewMoving(up: true, moveValue: 150)
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
@@ -350,7 +350,7 @@ extension QuizViewController: UITextFieldDelegate
         print("finished!!")
        
         navigationController?.navigationBar.isHidden = false
-        animateViewMoving(up: false, moveValue: 100)
+        animateViewMoving(up: false, moveValue: 150)
         
     
        

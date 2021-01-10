@@ -88,6 +88,8 @@ class PreQuizViewController: UIViewController
             label.numberOfLines = 0
             return label
     }()
+
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -110,7 +112,6 @@ class PreQuizViewController: UIViewController
         
         ConfigureDataSource()
         
-        SetupPopUpView()
         
     }
     
@@ -118,9 +119,7 @@ class PreQuizViewController: UIViewController
         tabBarController?.tabBar.isHidden = false
         navigationController?.navigationBar.isHidden = false
         
-        PopupView.topAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        PopupView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.75).isActive = true
-        
+     
         errorLabel.isHidden = true
     }
   
@@ -180,7 +179,7 @@ class PreQuizViewController: UIViewController
        
         ContentView.addSubview(SegmentControl)
         SegmentControl.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        SegmentControl.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 10).isActive = true
+        SegmentControl.topAnchor.constraint(equalTo: collectionView.bottomAnchor, constant: 30).isActive = true
         SegmentControl.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.75).isActive = true
         SegmentControl.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.075).isActive = true
         
@@ -305,14 +304,7 @@ extension PreQuizViewController
         
         let EditLanguagesAction = UIAlertAction(title: "Edit Languages", style: .default)
         { (action) in
-            
-            self.tabBarController?.tabBar.isHidden = true
-            self.LetPopUpViewAppear()
-            
-            //let vc = UIViewController()
-            //vc.view.backgroundColor = .systemBackground
-            //self.navigationController?.present(vc, animated: true, completion: nil)
-            
+            self.SetupEditLanguagesView()
         }
         
         let CancelAction = UIAlertAction(title: "Cancel", style: .cancel)
@@ -364,6 +356,30 @@ extension PreQuizViewController
     }
     
     
+    public func OverrideLanguagePair(FirstL: String, SecondL: String)
+    {
+        
+        print("Override initiated")
+                
+        print(FirstL)
+        print(SecondL)
+        
+        
+        LabelLanguageOne.text = FirstL
+        LabelLanguageTwo.text = SecondL
+        
+        
+        
+        /*
+        DataManager.delete(Name)
+        
+        let WordListToSave = WordList(name: CurrentListItem.name, TimeAdded: CurrentListItem.TimeAdded, LanguageOne: FirstL, LanguageTwo: SecondL, WordsLanguageOne: CurrentListItem.LanguageOneList, WordsLanguageTwo: CurrentListItem.LanguageTwoList)
+        
+        
+        WordListToSave.SaveItem()
+        */
+    }
+    
 }
 
 
@@ -385,7 +401,7 @@ extension PreQuizViewController
         collectionView.centerXAnchor.constraint(equalTo: ContentView.centerXAnchor).isActive = true
         //collectionView.bottomAnchor.constraint(equalTo: Button.topAnchor, constant: -10).isActive = true
         collectionView.widthAnchor.constraint(equalTo: ContentView.widthAnchor).isActive = true
-        collectionView.heightAnchor.constraint(equalToConstant: view.bounds.midY * 0.80).isActive = true
+        collectionView.heightAnchor.constraint(equalToConstant: CGFloat(ScrollViewLength) * 1.2).isActive = true
         
     }
     
@@ -417,6 +433,7 @@ extension PreQuizViewController
         Snapshot.appendSections([.main])
         Snapshot.appendItems(Array(0..<CurrentListItem.LanguageOneList.count + CurrentListItem.LanguageTwoList.count))
         DataSource.apply(Snapshot)
+       
     }
     
     func CreateLayout() -> UICollectionViewLayout
@@ -445,24 +462,68 @@ extension PreQuizViewController
 {
     //Pop Up View for language Change
     
-    func SetupPopUpView()
+    
+    func SetupEditLanguagesView()
     {
-        PopupView.isHidden = false
+        let vc = EditLanguagesViewController()
+        present(vc, animated: true, completion: nil)
+    }
+   
+    
+    
+    
+}
 
-        view.addSubview(PopupView)
 
-        PopupView.translatesAutoresizingMaskIntoConstraints = false
-        PopupView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
-        PopupView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
+
+class EditLanguagesViewController: UIViewController
+{
+
+    var NewLanguageOne: String!
+    var NewLanguageTwo: String!
+    
+    let PickerView: UIPickerView =
+        {
+            let picker = UIPickerView()
+            picker.translatesAutoresizingMaskIntoConstraints = false
+            
+            return picker
+        }()
+    
+    
+    let ListOfLanguages = ["English","Spanish","French","German","Portuguese","Dutch","Japanese","Italian"]
+    
+    let Button = UIButton()
+    let Label = UILabel()
+    let SaveChangesButton = CustomButton()
+    let ErrorLabel = UILabel()
+
+
+
+    override func viewDidLoad() {
+        SetupView()
+    }
+
+    
+    func SetupView()
+    {
+        
+        view.backgroundColor = .systemBackground
+        
+        
        
-        PopupView.layer.cornerRadius = 20
-        PopupView.layer.borderColor = UIColor.white.cgColor
-        PopupView.layer.borderWidth = 2.5
         
+        Label.font = .boldSystemFont(ofSize: 30)
+        Label.text = "Change Language Pair"
+        Label.translatesAutoresizingMaskIntoConstraints = false
         
-        PopupView.backgroundColor = .systemBackground
+        view.addSubview(Label)
         
-        let Button = UIButton()
+        Label.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20).isActive = true
+        Label.topAnchor.constraint(equalTo: view.topAnchor, constant: 60).isActive = true
+    
+        
+
         
         
         //Button.setTitle("Dismiss", for: .normal)
@@ -470,60 +531,115 @@ extension PreQuizViewController
         Button.tintColor = .systemGray
         
         
-        Button.addTarget(self, action: #selector(PopUpViewCancelButtonTapped), for: .touchUpInside)
+        Button.addTarget(self, action: #selector(CancelButtonTapped), for: .touchUpInside)
         
-        PopupView.addSubview(Button)
+        view.addSubview(Button)
         
         Button.translatesAutoresizingMaskIntoConstraints = false
-        Button.trailingAnchor.constraint(equalTo: PopupView.trailingAnchor, constant: -20).isActive = true
-        Button.topAnchor.constraint(equalTo: PopupView.topAnchor, constant: 20).isActive = true
+        Button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        Button.topAnchor.constraint(equalTo: view.topAnchor, constant: 20).isActive = true
         
+        PickerView.delegate = self
+        PickerView.dataSource = self
+        view.addSubview(PickerView)
         
-    }
-    
-    func LetPopUpViewAppear()
-    {
-    
-        PopupView.isHidden = false
-
-        PopupView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
+        PickerView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        PickerView.centerYAnchor.constraint(equalTo: view.centerYAnchor, constant: -40).isActive = true
        
+        SaveChangesButton.setTitle("Save Changes", for: .normal)
         
-        UIView.animate(withDuration: 0.2,
-                       delay: 0.0,
-                       options: .curveEaseInOut,
-                       animations: {
-                        self.view.layoutIfNeeded()
-                       },
-                       completion: nil
-                        )
-          
-    
+        view.addSubview(SaveChangesButton)
         
-       
+        SaveChangesButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100).isActive = true
+        SaveChangesButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        SaveChangesButton.widthAnchor.constraint(equalToConstant: 350).isActive = true
+        SaveChangesButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        
+        SaveChangesButton.addTarget(self, action: #selector(SaveButtonTapped), for: .touchUpInside)
     }
+   
     
-
-    
-    @objc func PopUpViewCancelButtonTapped()
+    @objc func CancelButtonTapped()
     {
-        PopupView.topAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        
-        UIView.animate(withDuration: 0.2,
-                       delay: 0.0,
-                       options: .curveEaseOut,
-                       animations:
-                        {
-                            self.view.layoutIfNeeded()
-                        },
-                       completion: nil)
-        
-        PopupView.isHidden = true
-        //self.navigationController?.setNavigationBarHidden(false, animated: true)
-        self.tabBarController?.tabBar.isHidden = false
+        dismiss(animated: true, completion: nil)
+   
     }
     
+    
+    @objc func SaveButtonTapped()
+    {
+        if(NewLanguageOne != NewLanguageTwo)
+        {
+            ErrorLabel.isHidden = true
+            
+            let AlertController = UIAlertController(title: "Save Changes?", message: "", preferredStyle: .alert)
+        
+            let alert = UIAlertAction(title: "Save", style: .default)
+            {(action) in
+            
+             self.dismiss(animated: true, completion: nil)
+             let vc = PreQuizViewController()
+                vc.OverrideLanguagePair(FirstL: self.NewLanguageOne, SecondL: self.NewLanguageTwo)
+
+            }
+        
+            let alert2 = UIAlertAction(title: "cancel", style: .cancel)
+           {(action) in
+            
+            }
+           AlertController.addAction(alert)
+           AlertController.addAction(alert2)
+        
+        
+        self.present(AlertController, animated: true, completion: nil)
+            
+        }
+        
+        
+        else
+        {
+            ErrorLabel.isHidden = false
+            ErrorLabel.text = "Please choose two different Languages"
+            ErrorLabel.font = .boldSystemFont(ofSize: 14)
+            ErrorLabel.textColor = .systemRed
+            ErrorLabel.translatesAutoresizingMaskIntoConstraints = false
+            
+            view.addSubview(ErrorLabel)
+            
+            ErrorLabel.topAnchor.constraint(equalTo: SaveChangesButton.bottomAnchor, constant: 10).isActive = true
+            ErrorLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+            
+        }
+    }
     
 }
 
 
+extension EditLanguagesViewController: UIPickerViewDelegate, UIPickerViewDataSource
+{
+   
+    func numberOfComponents(in PickerView: UIPickerView) -> Int{
+        return 2
+    }
+    
+    func pickerView(_ PickerView: UIPickerView, numberOfRowsInComponent component: Int)->Int
+    {
+        return ListOfLanguages.count
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+           if component == 0 {
+               return ListOfLanguages[row]
+           }else {
+               return ListOfLanguages[row]
+           }
+       }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        NewLanguageOne = ListOfLanguages[pickerView.selectedRow(inComponent: 0)]
+        NewLanguageTwo = ListOfLanguages[pickerView.selectedRow(inComponent: 1)]
+    }
+    
+    
+   
+}

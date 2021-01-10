@@ -31,6 +31,18 @@ class DictionaryMenuViewController: UIViewController {
             return tableView
         }()
     
+    let EmptyLabel: UILabel =
+        {
+            let EmptyLabel = UILabel()
+            EmptyLabel.translatesAutoresizingMaskIntoConstraints = false
+            EmptyLabel.textColor = .systemGray4
+            EmptyLabel.text = "Create Wordlists to see all your Words here"
+            EmptyLabel.numberOfLines = 0
+            
+            
+            return EmptyLabel
+        }()
+    
     let searchcontroller = UISearchController(searchResultsController: nil)
    
     
@@ -68,6 +80,7 @@ class DictionaryMenuViewController: UIViewController {
        
         
         SetLayout()
+        SetupIsEmptyLabel()
         //initializeHideKeyboard()
         
         
@@ -78,6 +91,17 @@ class DictionaryMenuViewController: UIViewController {
         
         
         let TempItems = DataManager.LoadAll(WordList.self)
+        
+        
+        if(DataManager.GetTotalNum(WordList.self) == 0)
+        {
+            EmptyLabel.isHidden = false
+        }
+        else if(DataManager.GetTotalNum(WordList.self) > 0)
+        {
+            EmptyLabel.isHidden = true
+        }
+        
         
         for Num in 0..<TempItems.count {
             ListItems.append(ListItem(name: TempItems[Num].name, TimeAdded: TempItems[Num].TimeAdded, LanguageOne: TempItems[Num].LanguageOne, LanguageTwo: TempItems[Num].LanguageTwo, LanguageOneList: TempItems[Num].WordsLanguageOne, LanguageTwoList: TempItems[Num].WordsLanguageTwo))
@@ -90,6 +114,7 @@ class DictionaryMenuViewController: UIViewController {
         
         AddWordstoTableView()
 
+        TableView.reloadData()
     }
     
     func SetupLanguagesArray()
@@ -135,6 +160,15 @@ class DictionaryMenuViewController: UIViewController {
      view.endEditing(true)
      }
        
+    func SetupIsEmptyLabel()
+    {
+      
+        view.addSubview(EmptyLabel)
+        EmptyLabel.centerXAnchor.constraint(equalTo: TableView.centerXAnchor).isActive = true
+        EmptyLabel.centerYAnchor.constraint(equalTo: TableView.centerYAnchor).isActive = true
+        
+        EmptyLabel.isHidden = true
+    }
     
     
 }
@@ -213,9 +247,12 @@ extension DictionaryMenuViewController: UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
+        
+        tableView.deselectRow(at: indexPath, animated: true)
+        
         let vc = WordViewController()
         //vc.navigationBar.prefersLargeTitles = true
-        vc.SetupTitle(titleOfVC: Words[indexPath.row])
+        vc.SetupTitle(titleOfVC: Words[indexPath.row], Language: AllLanguages[searchcontroller.searchBar.selectedScopeButtonIndex])
         
         present(vc, animated: true, completion: nil)
     }
@@ -259,7 +296,11 @@ extension DictionaryMenuViewController: UITableViewDelegate, UITableViewDataSour
     
 }
 
-
+struct TranslationList: Hashable
+{
+    var Word: String
+    var FromLanguage: String
+}
 
 class WordViewController: UIViewController
 {
@@ -268,6 +309,7 @@ class WordViewController: UIViewController
            let label = UILabel()
             label.font = .boldSystemFont(ofSize: 37)
             label.translatesAutoresizingMaskIntoConstraints = false
+            label.numberOfLines = 0
             
             return label
         }()
@@ -301,25 +343,53 @@ class WordViewController: UIViewController
         }()
     
     
+    enum Section
+    {
+        case Main
+    }
+    
+    var collectionview: UICollectionView!
+    var diffableDataSource: UICollectionViewDiffableDataSource<Section, TranslationList>!
+    var snapshot: NSDiffableDataSourceSnapshot<Section, TranslationList>!
+    
+    
+    var List: [String: String]!
+    var Items = [TranslationList]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         view.backgroundColor = .systemBackground
+       
         //title = "Your Word:"
-        
-            
-      
+        SetupBarButton()
         
     }
     
-    func SetupTitle(titleOfVC: String)
+    
+    func SetupTitle(titleOfVC: String, Language: String)
     {
         view.addSubview(TitleLabel)
         TitleLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 30).isActive = true
         TitleLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 40).isActive = true
         TitleLabel.text = titleOfVC
         
+        
         SetupOtherLabels()
+        
+        List = GetMatchingWords(FromLanguage: Language, Word: titleOfVC)
+        
+        
+        for (key, value) in List
+        {
+            Items.append(TranslationList(Word: key, FromLanguage: value))
+        }
+        
+        ConfigureCollectionView()
+        ConfigureDataSource()
+        
+        
+        
     }
     
     
@@ -337,6 +407,221 @@ class WordViewController: UIViewController
     }
     
     
+    
+    func GetMatchingWords(FromLanguage: String, Word: String) -> [String: String]
+    {
+        /*
+          Dictionary for Array:
+          Word: Language
+          Word->From Search through list
+          Language->From Corresponding List
+        */
+        
+        var Matches = [String: String]()
+         
+        let Data = DataManager.LoadAll(WordList.self)
+        //var FilteredData = [WordList]()
+        
+        for item in 0..<Data.count
+        {
+            if(Data[item].LanguageOne == FromLanguage)
+            {
+                for i in 0..<Data[item].WordsLanguageOne.count {
+                    if(Word.lowercased() == Data[item].WordsLanguageOne[i].lowercased())
+                    {
+                        Matches[Data[item].WordsLanguageTwo[i]] = Data[item].LanguageTwo
+                        
+                    }
+                }
+            }
+            else if(Data[item].LanguageTwo == FromLanguage)
+            {
+                for i in 0..<Data[item].WordsLanguageTwo.count {
+                    if(Word.lowercased() == Data[item].WordsLanguageTwo[i].lowercased())
+                    {
+                        Matches[Data[item].WordsLanguageOne[i]] = Data[item].LanguageOne
+                    }
+                }
+            }
+        }
+        
+        
+        return Matches
+    }
+    
 
+    func SetupBarButton()
+    {
+        let Button = UIButton()
+        Button.setImage(UIImage(systemName: "xmark"), for: .normal)
+        Button.tintColor = .systemGray
+        Button.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(Button)
+        
+        print("Pressed")
+        
+        Button.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20).isActive = true
+        Button.topAnchor.constraint(equalTo: view.topAnchor, constant: 25).isActive = true
+        
+        
+        Button.addTarget(self, action: #selector(DismissButtonTapped), for: .touchUpInside)
+    }
+    
+    @objc func DismissButtonTapped()
+    {
+        dismiss(animated: true, completion: nil)
+    }
 }
+
+extension WordViewController
+{
+    
+    func ConfigureCollectionViewLayout() -> UICollectionViewLayout
+    {
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                             heightDimension: .fractionalHeight(1.0))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                              heightDimension: .absolute(70))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
+        
+        let spacing = CGFloat(20)
+        group.interItemSpacing = .fixed(spacing)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 20, leading: 10, bottom: 0, trailing: 10)
+        section.interGroupSpacing = spacing
+      
+
+        let layout = UICollectionViewCompositionalLayout(section: section)
+    
+        return layout
+    }
+    
+    func ConfigureCollectionView()
+    {
+        collectionview = UICollectionView(frame: .zero, collectionViewLayout: ConfigureCollectionViewLayout())
+        collectionview.dataSource = diffableDataSource
+        collectionview.register(TranslationCell.self, forCellWithReuseIdentifier: TranslationCell.reuseidentifier)
+        collectionview.translatesAutoresizingMaskIntoConstraints = false
+        
+        if(self.traitCollection.userInterfaceStyle == .dark)
+        {
+           collectionview.backgroundColor = .black
+        }
+        else
+        {
+            collectionview.backgroundColor = .systemGroupedBackground
+        }
+        view.addSubview(collectionview)
+        
+        collectionview.topAnchor.constraint(equalTo: AnotherLabel.bottomAnchor, constant: 20).isActive = true
+        collectionview.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        collectionview.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        
+    }
+    
+    func ConfigureDataSource()
+    {
+        diffableDataSource = UICollectionViewDiffableDataSource(collectionView: collectionview)
+        {
+        (collectionView: UICollectionView, indexPath: IndexPath, List) -> UICollectionViewCell? in
+        
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: TranslationCell.reuseidentifier,
+            for: indexPath) as? TranslationCell else { fatalError("Cannot create new cell") }
+       
+        cell.contentView.backgroundColor = .systemBackground
+        cell.layer.borderColor = UIColor.lightGray.withAlphaComponent(0.3).cgColor
+        cell.layer.borderWidth = 0
+        cell.InitWithList(Item: List)
+     
+        return cell
+    }
+    
+    var Snapshot = NSDiffableDataSourceSnapshot<Section, TranslationList>()
+    Snapshot.appendSections([.Main])
+        
+    //let Item = TranslationList(Word: "Der Senat", FromLanguage: "German")
+    Snapshot.appendItems(Items)
+    diffableDataSource.apply(Snapshot)
+    }
+}
+
+
+extension WordViewController
+{
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        
+        if(self.traitCollection.userInterfaceStyle == .dark)
+        {
+           collectionview.backgroundColor = .black
+        }
+        else
+        {
+            collectionview.backgroundColor = .systemGroupedBackground
+        }
+        
+    }
+    
+}
+        
+        
+
+class TranslationCell: UICollectionViewCell
+{
+    static let reuseidentifier = "TranslationCell"
+  
+    
+    let TranslationLabel: UILabel =
+        {
+            let Label = UILabel()
+            Label.translatesAutoresizingMaskIntoConstraints = false
+            Label.font = .boldSystemFont(ofSize: 16)
+            
+            return Label
+        }()
+    
+    let WordLabel: UILabel =
+        {
+            let Label = UILabel()
+            Label.translatesAutoresizingMaskIntoConstraints = false
+            Label.font = .boldSystemFont(ofSize: 16)
+            
+            return Label
+        }()
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        
+        contentView.layer.cornerRadius = 10
+    }
+    
+    func InitWithList(Item: TranslationList)
+    {
+        contentView.addSubview(TranslationLabel)
+        TranslationLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        TranslationLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 40).isActive = true
+        TranslationLabel.text = "\(Item.FromLanguage):"
+        
+        contentView.addSubview(WordLabel)
+        WordLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        WordLabel.leadingAnchor.constraint(equalTo: TranslationLabel.trailingAnchor, constant: 10).isActive = true
+        WordLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -40).isActive = true
+        WordLabel.text = Item.Word
+        
+    }
+    
+    
+   
+    
+}
+    
+    
+    
+    
+    
+    
 

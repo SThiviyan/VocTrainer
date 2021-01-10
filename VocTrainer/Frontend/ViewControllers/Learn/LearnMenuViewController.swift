@@ -23,6 +23,18 @@ class LearnMenuViewController: UIViewController
     typealias DataSourceSnapshot = NSDiffableDataSourceSnapshot<Section, ListItem>
     
     
+    let EmptyLabel: UILabel =
+        {
+            let EmptyLabel = UILabel()
+            EmptyLabel.translatesAutoresizingMaskIntoConstraints = false
+            EmptyLabel.textColor = .systemGray4
+            EmptyLabel.text = "Add WordLists to Study"
+            
+            
+            return EmptyLabel
+        }()
+    
+    
     let button: UIButton =
         {
             let button = UIButton()
@@ -63,9 +75,19 @@ class LearnMenuViewController: UIViewController
         SetupButton()
         SetupBarButton()
         SetupBarSearchBar()
-        
+        SetupIsEmptyLabel()
+       
         //loaddata()
 
+        
+        if(traitCollection.userInterfaceStyle == .dark)
+        {
+            collectionView.backgroundColor = .black
+        }
+        else
+        {
+            collectionView.backgroundColor = .systemGroupedBackground
+        }
         
     }
     
@@ -73,6 +95,8 @@ class LearnMenuViewController: UIViewController
         super.viewDidAppear(animated)
         
         AnimateCellsAppearance()
+        
+        
         
     }
    
@@ -84,6 +108,15 @@ class LearnMenuViewController: UIViewController
             .sorted(by: {
             $0.TimeAdded < $1.TimeAdded
         })
+        
+        if(DataManager.GetTotalNum(WordList.self) == 0)
+        {
+            EmptyLabel.isHidden = false
+        }
+        else if(DataManager.GetTotalNum(WordList.self) > 0)
+        {
+            EmptyLabel.isHidden = true
+        }
         
         var compareList = [ListItem]()
         
@@ -150,7 +183,7 @@ class LearnMenuViewController: UIViewController
     
     }
     
-    
+  
 }
 
 
@@ -461,7 +494,17 @@ extension LearnMenuViewController
         dataSource.apply(snapshot, animatingDifferences: true)
     }
     
-
+    
+    func SetupIsEmptyLabel()
+    {
+      
+        view.addSubview(EmptyLabel)
+        EmptyLabel.centerXAnchor.constraint(equalTo: collectionView.centerXAnchor).isActive = true
+        EmptyLabel.centerYAnchor.constraint(equalTo: collectionView.centerYAnchor).isActive = true
+        
+        EmptyLabel.isHidden = true
+    }
+    
     
 }
 
@@ -481,7 +524,19 @@ extension LearnMenuViewController: UICollectionViewDelegate
                
     }
         
-    
+    override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+        
+        if(traitCollection.userInterfaceStyle == .dark)
+        {
+            collectionView.backgroundColor = .black
+        }
+        else
+        {
+            collectionView.backgroundColor = .systemGroupedBackground
+        }
+        
+        
+    }
     
 
            
