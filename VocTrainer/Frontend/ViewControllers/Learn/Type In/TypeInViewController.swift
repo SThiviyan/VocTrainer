@@ -22,7 +22,7 @@ class TypeInViewController: UIViewController
     var LanguageOneTexts = [String()]
     var LanguageTwoTexts = [String()]
     
-    var NumRows = 30
+    var NumRows = 60
     
     
     let Continue: CustomButton =

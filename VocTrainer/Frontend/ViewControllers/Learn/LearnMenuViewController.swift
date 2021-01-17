@@ -175,7 +175,7 @@ class LearnMenuViewController: UIViewController
 
         
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            collectionView.topAnchor.constraint(equalTo: view.topAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.widthAnchor.constraint(equalTo: view.widthAnchor)

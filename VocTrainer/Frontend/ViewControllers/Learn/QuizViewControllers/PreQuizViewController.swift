@@ -368,16 +368,15 @@ extension PreQuizViewController
         LabelLanguageOne.text = FirstL
         LabelLanguageTwo.text = SecondL
         
+        let Name = title
         
-        
-        /*
-        DataManager.delete(Name)
+        DataManager.delete(CurrentListItem.name)
         
         let WordListToSave = WordList(name: CurrentListItem.name, TimeAdded: CurrentListItem.TimeAdded, LanguageOne: FirstL, LanguageTwo: SecondL, WordsLanguageOne: CurrentListItem.LanguageOneList, WordsLanguageTwo: CurrentListItem.LanguageTwoList)
         
         
         WordListToSave.SaveItem()
-        */
+        
     }
     
 }

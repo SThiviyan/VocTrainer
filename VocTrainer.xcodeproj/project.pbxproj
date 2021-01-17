@@ -28,6 +28,8 @@
 		C57414642544D2D800D771FE /* Pods_VocTrainer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9F9C2A939DBB6D70FFF2400 /* Pods_VocTrainer.framework */; };
 		C574146E2544DBF700D771FE /* CustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C574146D2544DBF700D771FE /* CustomCell.swift */; };
 		C5768674258E9E5D0095A8CC /* PreQuizViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5768672258E9E5D0095A8CC /* PreQuizViewController.swift */; };
+		C577B96425B210760094E43B /* DeleteListsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C577B96325B210760094E43B /* DeleteListsViewController.swift */; };
+		C57E9F9725AF912A00586BB2 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C57E9F9625AF912900586BB2 /* SettingsViewController.swift */; };
 		C58F06712555D2BA0049B332 /* TableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C58F06702555D2BA0049B332 /* TableViewCell.swift */; };
 		C594C63D259982760063EBC8 /* QuizViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C594C63C259982760063EBC8 /* QuizViewController.swift */; };
 		C59F21B0254A2CBE002552F2 /* NamingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C59F21AF254A2CBE002552F2 /* NamingViewController.swift */; };
@@ -58,6 +60,8 @@
 		C57414612544D1A300D771FE /* TypeInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypeInViewController.swift; sourceTree = "<group>"; };
 		C574146D2544DBF700D771FE /* CustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCell.swift; sourceTree = "<group>"; };
 		C5768672258E9E5D0095A8CC /* PreQuizViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreQuizViewController.swift; sourceTree = "<group>"; };
+		C577B96325B210760094E43B /* DeleteListsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeleteListsViewController.swift; sourceTree = "<group>"; };
+		C57E9F9625AF912900586BB2 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		C58F06702555D2BA0049B332 /* TableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TableViewCell.swift; sourceTree = "<group>"; };
 		C594C63C259982760063EBC8 /* QuizViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizViewController.swift; sourceTree = "<group>"; };
 		C59F21AF254A2CBE002552F2 /* NamingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NamingViewController.swift; sourceTree = "<group>"; };
@@ -179,6 +183,8 @@
 			children = (
 				C550C69F2538C6D100EE103E /* TutorialViewController.swift */,
 				C550C69B2538C68400EE103E /* MainMenuViewController.swift */,
+				C57E9F9625AF912900586BB2 /* SettingsViewController.swift */,
+				C577B96325B210760094E43B /* DeleteListsViewController.swift */,
 			);
 			path = Home;
 			sourceTree = "<group>";
@@ -330,6 +336,7 @@
 				C550C6962538C5F300EE103E /* DictionaryMenuViewController.swift in Sources */,
 				C550C6B42538CEEB00EE103E /* AddWordsViewController.swift in Sources */,
 				C574145E2544D10C00D771FE /* ScanViewController.swift in Sources */,
+				C577B96425B210760094E43B /* DeleteListsViewController.swift in Sources */,
 				C574145B2544D08A00D771FE /* PickLanguagesViewController.swift in Sources */,
 				C550C6A02538C6D100EE103E /* TutorialViewController.swift in Sources */,
 				C574146E2544DBF700D771FE /* CustomCell.swift in Sources */,
@@ -339,6 +346,7 @@
 				C550C646253469AE00EE103E /* AppDelegate.swift in Sources */,
 				C54120AE256071960066397B /* LearnCollectionViewCell.swift in Sources */,
 				C550C69C2538C68400EE103E /* MainMenuViewController.swift in Sources */,
+				C57E9F9725AF912A00586BB2 /* SettingsViewController.swift in Sources */,
 				C550C648253469AE00EE103E /* SceneDelegate.swift in Sources */,
 				C550C6902537168200EE103E /* CustomButton.swift in Sources */,
 				C594C63D259982760063EBC8 /* QuizViewController.swift in Sources */,
